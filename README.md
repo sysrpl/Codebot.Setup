@@ -15,7 +15,7 @@ in practice you can use whatever location or folder name you prefer.
 
 Open a terminal, create your base folder, and change to that directory.
 
-Linux:
+Debian/Ubuntu:
 ```
 mkdir $HOME/Development/Base
 cd $HOME/Development/Base
@@ -25,6 +25,23 @@ Windows:
 mkdir C:\Development\Base
 cd C:\Development\Base
 ```
+
+### Install prerequisites
+
+You'll need access the build system and subversion tools.
+
+Debian/Ubuntu:
+```
+sudo apt-get install build-essentials subversion
+```
+Windows:
+
+1. Download bintools.zip
+2. Extract the files to C:\Development\Base\bintools
+3. Add C:\Development\Base\bintools permanently to your path
+4. Close the old terminal, open a new one, and type "svn help"
+5. You should see the help text for the subversion tool
+
 ## Setting up a trunk version of Free Pascal
 
 
@@ -41,7 +58,7 @@ C:\Development\Base\fpc-2.6.4)
 Add the newly created C:\Development\Base\fpc-2.6.4\bin folder to your
 PATH variable.
 
-Linux:
+Debian/Ubuntu:
 `PATH=$PATH:$HOME/Development/Base/fpc-2.6.4
 
 Windows:

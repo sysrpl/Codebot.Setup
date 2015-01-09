@@ -1,10 +1,19 @@
-# Free Pascal and Lazarus Trunk Setup Guide
+# Free Pascal and Lazarus Trunk Setup
 
-This guide
+This guide will assist users in compiling and configuring the latest
+versions of the Free Pascal Compiler and Lazarus IDE. The source code
+for these projects will be pulled from their official subversion
+repositories.
 
-Create a base directory to hold files.
+This guide is for all operating systems.
 
 ## Before you begin
+
+Before you begin you should create a base folder to store the compiler
+and IDE. In this guide I use the folder $HOME/Development/Base, but
+in practice you can use whatever location or folder name you prefer.
+
+Open a terminal, create your base folder, and change to that directory.
 
 Linux:
 ```

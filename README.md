@@ -7,13 +7,14 @@ repositories.
 
 This guide is for all operating systems.
 
-## Before you begin
+## Setting up your paths
 
-Before you begin you should create a base folder to store the compiler
-and IDE. In this guide I use the folder $HOME/Development/Base, but
-in practice you can use whatever location or folder name you prefer.
+Create a folder to store the compiler, IDE, and other tools. In this 
+guide I use the folder $HOME/Development/Base, but you can use whatever 
+folder name you prefer.
 
-Open a terminal, create your base folder, and change to that directory.
+Open a terminal (cmd.exe on Windows), create your base folder, and 
+change to that directory.
 
 Debian/Ubuntu:
 ```
@@ -28,8 +29,8 @@ cd C:\Development\Base
 
 ### Install the prerequisites
 
-You'll need access to build system and subversion tools. If they are not
-already installed you can set them up using these steps.
+Before you begin you need to install the build system and subversion 
+tools. If you don't already have them setup, follow these steps.
 
 Debian/Ubuntu:
 ```
@@ -39,18 +40,20 @@ Windows:
 
 1. Download bintools.zip
 2. Extract the files to C:\Development\Base\bintools
-3. Add C:\Development\Base\bintools permanently to your path
+3. Add C:\Development\Base\bintools to your path
 
-Close the old terminal, open a new one, and type "svn help". You should 
-see help text for the subversion tool.
+In terminal and type "svn help". You should see the help for the 
+subversion program.
+
 
 ## Setting up a trunk version of Free Pascal
-
 
 Download and install a working 2.6.4 version of the Free Pascal 
 Compiler for your platform from:
 
-http://sourceforge.net/projects/freepascal/files/
+- [FPC 2.6.4 for Debian/Ubuntu 32-bit](http://sourceforge.net/projects/freepascal/files/Linux/2.6.4/fpc-2.6.4.i386-linux.tar/download)
+- [FPC 2.6.4 for Debian/Ubuntu 64-bit](http://sourceforge.net/projects/freepascal/files/Linux/2.6.4/fpc-2.6.4.x86_64-linux.tar/download)
+- [FPC 2.6.4 for Windows](http://sourceforge.net/projects/freepascal/files/Win32/2.6.4/)
 
 Open a terminal, extract the downloaded archive, and run the setup
 script. When the script asks for the install folder, refer to your

@@ -48,15 +48,15 @@ subversion program.
 
 ## Setting up a trunk version of Free Pascal
 
-Download and install a working 2.6.4 version of the Free Pascal 
+Download and a working 2.6.4 version of the Free Pascal 
 Compiler for your platform from:
 
 - [FPC 2.6.4 for Debian/Ubuntu 32-bit](http://sourceforge.net/projects/freepascal/files/Linux/2.6.4/fpc-2.6.4.i386-linux.tar/download)
 - [FPC 2.6.4 for Debian/Ubuntu 64-bit](http://sourceforge.net/projects/freepascal/files/Linux/2.6.4/fpc-2.6.4.x86_64-linux.tar/download)
 - [FPC 2.6.4 for Windows](http://sourceforge.net/projects/freepascal/files/Win32/2.6.4/)
 
-Open a terminal, extract the downloaded archive, and run the setup
-script. When the script asks for the install folder, refer to your
+Open a terminal, extract file from the downloaded archive, then run its
+setup script. When the script asks for the install folder, it to your
 base folder ($HOME/Development/Base/fpc-2.6.4 or 
 C:\Development\Base\fpc-2.6.4)
 
@@ -64,10 +64,14 @@ Add the newly created C:\Development\Base\fpc-2.6.4\bin folder to your
 PATH variable.
 
 Debian/Ubuntu:
-`PATH=$PATH:$HOME/Development/Base/fpc-2.6.4
+```
+PATH=$PATH:$HOME/Development/Base/fpc-2.6.4/bin
+```
 
 Windows:
-`PATH=%PATH%;C:\Development\Base\fpc-2.6.4\bin
+```
+PATH=%PATH%;C:\Development\Base\fpc-2.6.4\bin
+```
 
 Type 'fpc' to verify installation.
 

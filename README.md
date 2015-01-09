@@ -26,9 +26,10 @@ mkdir C:\Development\Base
 cd C:\Development\Base
 ```
 
-### Install prerequisites
+### Install the prerequisites
 
-Install the prerequisite build system and subversion tools.
+You'll need access to build system and subversion tools. If they are not
+already installed you can set them up using these steps.
 
 Debian/Ubuntu:
 ```

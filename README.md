@@ -1,15 +1,17 @@
-# Setup Guide
+# Free Pascal and Lazarus Trunk Setup Guide
 
 This guide
 
 Create a base directory to hold files.
 
-On Linux:
+## Before you begin
+
+Linux:
 ```
 mkdir $HOME/Development/Base
 cd $HOME/Development/Base
 ```
-On Windows:
+Windows:
 ```
 mkdir C:\Development\Base
 cd C:\Development\Base
@@ -30,10 +32,10 @@ C:\Development\Base\fpc-2.6.4)
 Add the newly created C:\Development\Base\fpc-2.6.4\bin folder to your
 PATH variable.
 
-On Linux:
+Linux:
 `PATH=$PATH:$HOME/Development/Base/fpc-2.6.4
 
-On Windows:
+Windows:
 `PATH=%PATH%;C:\Development\Base\fpc-2.6.4\bin
 
 Type 'fpc' to verify installation.

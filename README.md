@@ -28,7 +28,7 @@ cd C:\Development\Base
 
 ### Install prerequisites
 
-You'll need access the build system and subversion tools.
+Install the prerequisite build system and subversion tools.
 
 Debian/Ubuntu:
 ```
@@ -39,8 +39,9 @@ Windows:
 1. Download bintools.zip
 2. Extract the files to C:\Development\Base\bintools
 3. Add C:\Development\Base\bintools permanently to your path
-4. Close the old terminal, open a new one, and type "svn help"
-5. You should see the help text for the subversion tool
+
+Close the old terminal, open a new one, and type "svn help". You should 
+see help text for the subversion tool.
 
 ## Setting up a trunk version of Free Pascal
 

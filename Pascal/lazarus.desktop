@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.1
+Name=Lazarus IDE
+Comment=A free pascal development environment
+Exec=/home/delluser/Development/Base/lazarus/lazarus.sh
+Icon=/home/delluser/Development/Base/lazarus/images/icons/lazarus_orange.ico
+Terminal=false
+Type=Application
+Categories=Development;IDE;

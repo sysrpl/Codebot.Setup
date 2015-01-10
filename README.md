@@ -41,9 +41,11 @@ Windows:
 2. Extract the files to C:\Development\Base\bintools
 3. Add C:\Development\Base\bintools to your path
 
-In terminal and type "svn help". You should see the help for the 
-subversion program.
-
+In terminal type:
+```
+svn help
+```
+You should see a help listing for the subversion program.
 
 ## Setting up a trunk version of Free Pascal
 

@@ -10,21 +10,20 @@ This guide is for all operating systems.
 ## Setting up your paths
 
 Create a folder to store the compiler, IDE, and other tools. In this 
-guide I use the folder $HOME/Development/Base, but you can use whatever 
-folder name you prefer.
+guide I use the variable BASE ro refer to the $HOME/Development/Base
+folder, but you can use whatever folder name or location you prefer.
 
-Open a terminal (cmd.exe on Windows), create your base folder, and 
-change to that directory.
+Open a terminal and create your base folder.
 
 Debian/Ubuntu:
 ```
-mkdir $HOME/Development/Base
-cd $HOME/Development/Base
+BASE=$HOME/Development/Base
+mkdir $BASE
 ```
 Windows:
 ```
-mkdir C:\Development\Base
-cd C:\Development\Base
+set BASE=C:\Development\Base
+mkdir %BASE%
 ```
 
 ### Install the prerequisites
@@ -38,7 +37,7 @@ sudo apt-get install build-essentials subversion
 ```
 Windows:
 
-1. Download bintools.zip
+1. Download [bintools.zip](http://cache.codebot.org/bintools.zip)
 2. Extract the files to C:\Development\Base\bintools
 3. Add C:\Development\Base\bintools to your path
 
@@ -60,16 +59,18 @@ setup script. When the script asks for the install folder, it to your
 base folder ($HOME/Development/Base/fpc-2.6.4 or 
 C:\Development\Base\fpc-2.6.4)
 
-Add the newly created C:\Development\Base\fpc-2.6.4\bin folder to your
-PATH variable.
+In your terminal add the newly created C:\Development\Base\fpc-2.6.4\bin
+folder to your PATH variable.
 
 Debian/Ubuntu:
 ```
+OLDPATH=$PATH
 PATH=$PATH:$HOME/Development/Base/fpc-2.6.4/bin
 ```
 
 Windows:
 ```
+OLDPATH=$PATH
 PATH=%PATH%;C:\Development\Base\fpc-2.6.4\bin
 ```
 

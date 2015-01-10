@@ -41,42 +41,40 @@ Windows:
 2. Extract the files to C:\Development\Base\bintools
 3. Add C:\Development\Base\bintools to your path
 
-On all platforms you should now bew able to type into the terminal:
-```
-svn help
-```
-And see a help listing for the subversion program.
+Type 'svn help' into the terminal. You should see a help listing for the
+subversion program.
 
 ## Setting up a trunk version of Free Pascal
 
-Download and a working 2.6.4 version of the Free Pascal 
-Compiler for your platform from:
+Download and a working binary version of the Free Pascal 
+Compiler 2.6.4 for your platform:
 
 - [FPC 2.6.4 for Debian/Ubuntu 32-bit](http://sourceforge.net/projects/freepascal/files/Linux/2.6.4/fpc-2.6.4.i386-linux.tar/download)
 - [FPC 2.6.4 for Debian/Ubuntu 64-bit](http://sourceforge.net/projects/freepascal/files/Linux/2.6.4/fpc-2.6.4.x86_64-linux.tar/download)
 - [FPC 2.6.4 for Windows](http://sourceforge.net/projects/freepascal/files/Win32/2.6.4/)
 
-Open a terminal, extract file from the downloaded archive, then run its
-setup script. When the script asks for the install folder, it to your
-base folder ($HOME/Development/Base/fpc-2.6.4 or 
-C:\Development\Base\fpc-2.6.4)
+Extract the files from the downloaded archive. Open a terminal in the 
+directory containing the contents of the and run the setup script. When
+the script asks for the install folder, it to $BASE/fpc-2.6.4 on Linux
+or %BASE%\fpc-2.6.4 on Windows.
 
-In your terminal add the newly created C:\Development\Base\fpc-2.6.4\bin
-folder to your PATH variable.
+In your terminal add the following folder to your path, but first save 
+the old path.
 
 Debian/Ubuntu:
 ```
-OLDPATH=$PATH
-PATH=$PATH:$HOME/Development/Base/fpc-2.6.4/bin
+OLD_PATH=$PATH
+PATH=$PATH:$BASE/fpc-2.6.4/bin
 ```
 
 Windows:
 ```
-OLDPATH=$PATH
-PATH=%PATH%;C:\Development\Base\fpc-2.6.4\bin
+set OLD_PATH=$PATH
+set PATH=%PATH%;%BASE%\fpc-2.6.4\bin\i386-win32
 ```
 
-Type 'fpc' to verify installation.
+Type 'fpc' into the terminal. You should see a help listing for the
+Free Pascal Compiler listing version 2.6.4.
 
 Get the trunk version of fpc from svn (a revision number is optional).
 `svn co [-r rev#] http://svn.freepascal.org/svn/fpc/trunk fpc

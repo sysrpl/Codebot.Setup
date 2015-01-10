@@ -43,7 +43,7 @@ Windows:
 2. Extract the files to C:\Development\Base\bintools
 3. Add C:\Development\Base\bintools to your path
 
-Type 'svn help' into the terminal. You should see a help listing for the
+Type `svn help` into the terminal. You should see a help listing for the
 subversion program.
 
 ## Setting up a trunk version of Free Pascal
@@ -57,11 +57,10 @@ Compiler 2.6.4 for your platform:
 
 Extract the files from the downloaded archive. Open a terminal in the 
 directory containing the contents of the and run the setup script. When
-the script asks for the install folder, it to $BASE/fpc-2.6.4 on Linux
-or %BASE%\fpc-2.6.4 on Windows.
+the script asks for the install folder, it to `$BASE/fpc-2.6.4` on Linux
+or `%BASE%\fpc-2.6.4` on Windows.
 
-In your terminal add the following folder to your path, but first save 
-the old path.
+In the terminal save the old path then add the following:
 
 Debian/Ubuntu:
 ```
@@ -75,7 +74,7 @@ set OLD_PATH=$PATH
 set PATH=%PATH%;%BASE%\fpc-2.6.4\bin\i386-win32
 ```
 
-Type 'fpc' into the terminal. You should see a help listing for the
+Type `fpc` into the terminal. You should see a help listing for the
 Free Pascal Compiler listing version 2.6.4.
 
 Get the trunk version of fpc from svn (a revision number is optional).

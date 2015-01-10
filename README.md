@@ -7,6 +7,8 @@ repositories.
 
 This guide is for all operating systems.
 
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/P1cd-kWBz0E/0.jpg)](http://www.youtube.com/watch?v=P1cd-kWBz0E)
+
 ## Setting up your paths
 
 Create a folder to store the compiler, IDE, and other tools. In this 

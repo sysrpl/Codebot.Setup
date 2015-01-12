@@ -1,7 +1,7 @@
-# Free Pascal and Lazarus Trunk Setup
+# Free Pascal 3 and Lazarus Trunk Setup
 
-This guide will assist users in compiling and configuring the latest
-versions of the Free Pascal Compiler and Lazarus IDE. The source code
+This guide will assist users in compiling and configuring Free Pascal 
+Compiler 3 and Lazarus IDE. The source code
 for these projects will be pulled from their official subversion
 repositories.
 
@@ -10,7 +10,7 @@ This guide is for all operating systems.
 ## Setting up your paths
 
 Create a folder to store the compiler, IDE, and other tools. In this 
-guide I use the variable `BASE` ro refer to the `$HOME/Development/Base`
+guide I use the variable `BASE` to refer to the `$HOME/Development/Base`
 folder, but you can use whatever folder name or location you prefer.
 
 Open a terminal and create your base folder.
@@ -53,15 +53,25 @@ Compiler 2.6.4 for your platform:
 - [FPC 2.6.4 for Debian/Ubuntu 64-bit](http://sourceforge.net/projects/freepascal/files/Linux/2.6.4/fpc-2.6.4.x86_64-linux.tar/download)
 - [FPC 2.6.4 for Windows](http://sourceforge.net/projects/freepascal/files/Win32/2.6.4/)
 
-Extract the files from the downloaded archive. Open a terminal in the 
-directory containing the contents of the and run the setup script. When
-the script asks for the install folder, it to `$BASE/fpc-2.6.4` on Linux
-or `%BASE%\fpc-2.6.4` on Windows.
-
-In the terminal save the old path then add the following:
+Extract the files from the downloaded archive. On Linux you may want to
+backup your already existing FPC configuration file.
 
 Debian/Ubuntu:
 ```
+mv $HOME/.fpc.cfg $HOME/.fpc.bak
+```
+Then run the setup script for FPC 2.6.4. It will ask for install folder.
+Provide the value it to `$BASE/fpc-2.6.4` on Linux or 
+`C:\Development\Base\fpc-2.6.4` on Windows.
+
+On Linux we then move the new FPC configuration file and restore the old
+one. We also add to our path on all platforms.
+
+Debian/Ubuntu:
+```
+mv $HOME/.fpc.cfg $BASE/fpc-2.6.4/bin/fpc.cfg
+mv $HOME/.fpc.bak $HOME/.fpc.cfg
+export PPC_CONFIG_PATH=$BASE/fpc-2.6.4/bin
 OLD_PATH=$PATH
 PATH=$PATH:$BASE/fpc-2.6.4/bin
 ```
@@ -71,19 +81,30 @@ Windows:
 set OLD_PATH=$PATH
 set PATH=%PATH%;%BASE%\fpc-2.6.4\bin\i386-win32
 ```
+Type `fpc -iV` into your terminal. You should see version number `2.6.4`.
 
-Type `fpc` into the terminal. You should see a help listing for the
-Free Pascal Compiler listing version 2.6.4.
+Get the fpc 2.0 from svn.
+```
+http://svn.freepascal.org/svn/fpc/branches/fixes_3_0 fpc
+```
 
-Get the trunk version of fpc from svn (a revision number is optional).
-`svn co [-r rev#] http://svn.freepascal.org/svn/fpc/trunk fpc
-
-Build the fpc trunk compiler.
+Build the fpc 3.0 compiler.
 ```
 cd fpc
 make all
-make install PREFIX=<current path>
 ```
+
+Debian/Ubuntu:
+```
+make install INSTALL_PREFIX=$BASE
+```
+
+Windows:
+```
+```
+
+PPC_CONFIG_PATH
+
 Close the terminal then open a new one.
 
 Add the newly created fpc bin folder to your PATH variable.

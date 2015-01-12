@@ -10,7 +10,7 @@ This guide is for all operating systems.
 ## Setting up your paths
 
 Create a folder to store the compiler, IDE, and other tools. In this 
-guide I use the variable `BASE` to refer to the `$HOME/Development/Base`
+guide I u s e the variable `BASE` to refer to the `$HOME/Development/Base`
 folder, but you can use whatever folder name or location you prefer.
 
 Open a terminal and create your base folder.

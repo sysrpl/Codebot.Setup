@@ -1,8 +1,8 @@
 Index: components/ideintf/objectinspector.lfm
 ===================================================================
---- components/ideintf/objectinspector.lfm	(revision 47342)
+--- components/ideintf/objectinspector.lfm	(revision 47351)
 +++ components/ideintf/objectinspector.lfm	(working copy)
-@@ -1,7 +1,7 @@
+@@ -1,18 +1,18 @@
  object ObjectInspectorDlg: TObjectInspectorDlg
 -  Left = 338
 +  Left = 483
@@ -12,7 +12,6 @@ Index: components/ideintf/objectinspector.lfm
    Width = 300
    BorderStyle = bsSizeToolWin
    Caption = 'ObjectInspectorDlg'
-@@ -8,11 +8,11 @@
    ClientHeight = 669
    ClientWidth = 300
    KeyPreview = True
@@ -27,62 +26,9 @@ Index: components/ideintf/objectinspector.lfm
      Width = 300
      Panels = <    
        item
-@@ -24,11 +24,11 @@
-   end
-   object AvailPersistentComboBox: TComboBox
-     Left = 0
--    Height = 23
-+    Height = 31
-     Top = 0
-     Width = 300
-     Align = alTop
--    ItemHeight = 15
-+    ItemHeight = 0
-     OnCloseUp = AvailComboBoxCloseUp
-     Style = csDropDownList
-     TabOrder = 0
-@@ -36,9 +36,10 @@
-   object ComponentPanel: TPanel
-     Left = 0
-     Height = 184
--    Top = 23
-+    Top = 31
-     Width = 300
-     Align = alTop
-+    BevelOuter = bvNone
-     ClientHeight = 184
-     ClientWidth = 300
-     TabOrder = 2
-@@ -47,10 +48,10 @@
-       AnchorSideLeft.Side = asrBottom
-       AnchorSideTop.Control = FilterLabel
-       AnchorSideTop.Side = asrCenter
--      Left = 92
--      Height = 28
--      Top = 3
--      Width = 204
-+      Left = 94
-+      Height = 27
-+      Top = 2
-+      Width = 202
-       UseFormActivate = True
-       ButtonWidth = 23
-       NumGlyphs = 1
-@@ -61,9 +62,9 @@
-     end
-     object FilterLabel: TLabel
-       Left = 3
--      Height = 15
-+      Height = 17
-       Top = 7
--      Width = 69
-+      Width = 86
-       Caption = 'Co&mponents'
-       FocusControl = CompFilterEdit
-       ParentColor = False
 Index: ide/include/unix/lazbaseconf.inc
 ===================================================================
---- ide/include/unix/lazbaseconf.inc	(revision 47342)
+--- ide/include/unix/lazbaseconf.inc	(revision 47351)
 +++ ide/include/unix/lazbaseconf.inc	(working copy)
 @@ -142,12 +142,16 @@
    procedure InternalInit;
@@ -103,9 +49,35 @@ Index: ide/include/unix/lazbaseconf.inc
    SecondaryConfigPath:='/etc/lazarus';
  end;
  
+Index: ide/include/win/lazbaseconf.inc
+===================================================================
+--- ide/include/win/lazbaseconf.inc	(revision 47351)
++++ ide/include/win/lazbaseconf.inc	(working copy)
+@@ -141,6 +141,8 @@
+   procedure InternalInit;
+  ---------------------------------------------------------------------------}
+ procedure InternalInit;
++var
++  S: string;
+ begin
+   DefaultDrive := ExtractFileDrive(ProgramDirectory);
+   DefaultFPCTarget:= GetCompiledTargetCPU + '-' + GetCompiledTargetOS;
+@@ -148,7 +150,11 @@
+   // the last part of the path returned by GetAppConfigDir is the application
+   // name. Replace that by 'lazarus', to make sure that lazbuild uses
+   // the same primary config path
+-  PrimaryConfigPath:= ExtractFilePath(ChompPathDelim(SysToUTF8(GetAppConfigDir(False)))) + 'lazarus';
++  //PrimaryConfigPath:= ExtractFilePath(ChompPathDelim(SysToUTF8(GetAppConfigDir(False)))) + 'lazarus';
++  S := ExpandFileNameUTF8(ParamStrUTF8(0));
++  S := ExtractFileDir(S);
++  S := IncludeTrailingPathDelimiter(S) + 'config';
++  PrimaryConfigPath:= S;  
+   SecondaryConfigPath:=ChompPathDelim(ProgramDirectory);
+   DefaultFPCSrcDirs[1] := AppendPathDelim(ProgramDirectory) + 'fpcsrc';
+   DefaultLazarusSrcDirs[1] := DefaultDrive + '\lazarus';
 Index: ide/main.pp
 ===================================================================
---- ide/main.pp	(revision 47342)
+--- ide/main.pp	(revision 47351)
 +++ ide/main.pp	(working copy)
 @@ -2031,17 +2031,19 @@
      Result.Parent := MainIDEBar.pnlSpeedButtons;
@@ -130,7 +102,7 @@ Index: ide/main.pp
      Visible := EnvironmentOptions.IDESpeedButtonsVisible;
 Index: ide/projectinspector.lfm
 ===================================================================
---- ide/projectinspector.lfm	(revision 47342)
+--- ide/projectinspector.lfm	(revision 47351)
 +++ ide/projectinspector.lfm	(working copy)
 @@ -9,16 +9,15 @@
    ClientHeight = 456

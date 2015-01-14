@@ -39,7 +39,7 @@ require() {
 		echo 
 		echo "This script requires the program $1 which was not found on your system"
 		echo 
-		echo "On Debian ir Ubuntu type the following to install $1:"
+		echo "On Debian or Ubuntu type the following to install $1:"
 		echo "  sudo apt-get install $2"
 		echo "Then re-run this script"
 		echo 
@@ -81,14 +81,14 @@ read -r -p "Continue (y/n)? " REPLY
 
 case $REPLY in
     [yY][eE][sS]|[yY]) 
-        echo
-        ;;
+		echo
+		;;
     *)
-        # Exit the script if the user does not type "y" or "Y"
+		# Exit the script if the user does not type "y" or "Y"
 		echo "Aborting script"
-        echo 
+		echo 
 		exit 1
-        ;;
+		;;
 esac
 
 # Exit the script if $BASE folder already exist
@@ -157,12 +157,10 @@ cd $BASE/lazarus
 
 # function replace(folder, files, before, after) 
 replace() {
-    BEFORE=$(echo "$3" | sed 's/[\*\.]/\\&/g')
-    BEFORE=$(echo "$BEFORE" | sed 's/\//\\\//g')
-    AFTER=$(echo "$4" | sed 's/[\*\.]/\\&/g')
-    AFTER=$(echo "$AFTER" | sed 's/\//\\\//g')
-    echo "$BEFORE"
-    echo "$AFTER"
+	BEFORE=$(echo "$3" | sed 's/[\*\.]/\\&/g')
+	BEFORE=$(echo "$BEFORE" | sed 's/\//\\\//g')
+	AFTER=$(echo "$4" | sed 's/[\*\.]/\\&/g')
+	AFTER=$(echo "$AFTER" | sed 's/\//\\\//g')
 	find "$1" -name "$2" -exec sed -i "s/$BEFORE/$AFTER/g" {} \;
 }
 

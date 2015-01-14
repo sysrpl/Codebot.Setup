@@ -1,0 +1,331 @@
+Index: components/ideintf/objectinspector.lfm
+===================================================================
+--- components/ideintf/objectinspector.lfm	(revision 47345)
++++ components/ideintf/objectinspector.lfm	(working copy)
+@@ -1,7 +1,7 @@
+ object ObjectInspectorDlg: TObjectInspectorDlg
+-  Left = 338
++  Left = 483
+   Height = 669
+-  Top = 162
++  Top = 103
+   Width = 300
+   BorderStyle = bsSizeToolWin
+   Caption = 'ObjectInspectorDlg'
+@@ -8,11 +8,11 @@
+   ClientHeight = 669
+   ClientWidth = 300
+   KeyPreview = True
+-  LCLVersion = '1.3'
++  LCLVersion = '1.4.0.1'
+   object StatusBar: TStatusBar
+     Left = 0
+-    Height = 23
+-    Top = 646
++    Height = 21
++    Top = 648
+     Width = 300
+     Panels = <    
+       item
+@@ -24,11 +24,11 @@
+   end
+   object AvailPersistentComboBox: TComboBox
+     Left = 0
+-    Height = 23
++    Height = 31
+     Top = 0
+     Width = 300
+     Align = alTop
+-    ItemHeight = 15
++    ItemHeight = 0
+     OnCloseUp = AvailComboBoxCloseUp
+     Style = csDropDownList
+     TabOrder = 0
+@@ -36,9 +36,10 @@
+   object ComponentPanel: TPanel
+     Left = 0
+     Height = 184
+-    Top = 23
++    Top = 31
+     Width = 300
+     Align = alTop
++    BevelOuter = bvNone
+     ClientHeight = 184
+     ClientWidth = 300
+     TabOrder = 2
+@@ -47,10 +48,10 @@
+       AnchorSideLeft.Side = asrBottom
+       AnchorSideTop.Control = FilterLabel
+       AnchorSideTop.Side = asrCenter
+-      Left = 92
+-      Height = 28
+-      Top = 3
+-      Width = 204
++      Left = 94
++      Height = 27
++      Top = 2
++      Width = 202
+       UseFormActivate = True
+       ButtonWidth = 23
+       NumGlyphs = 1
+@@ -61,9 +62,9 @@
+     end
+     object FilterLabel: TLabel
+       Left = 3
+-      Height = 15
++      Height = 17
+       Top = 7
+-      Width = 69
++      Width = 86
+       Caption = 'Co&mponents'
+       FocusControl = CompFilterEdit
+       ParentColor = False
+Index: components/ideintf/projectintf.pas
+===================================================================
+--- components/ideintf/projectintf.pas	(revision 47345)
++++ components/ideintf/projectintf.pas	(working copy)
+@@ -825,7 +825,7 @@
+ 
+ function TFileDescPascalUnit.GetUnitDirectives: string;
+ begin
+-  Result:='{$mode objfpc}{$H+}';
++  Result:='{$mode delphi}';
+   if Owner is TLazProject then
+     Result:=CompilerOptionsToUnitDirectives(Owner.LazCompilerOptions);
+ end;
+@@ -862,7 +862,7 @@
+ var
+   SyntaxMode: String;
+ begin
+-  Result:='{$mode objfpc}{$H+}';
++  Result:='{$mode delphi}';
+   if CompOpts=nil then exit;
+   SyntaxMode:=CompOpts.SyntaxMode;
+   if SyntaxMode<>'' then begin
+@@ -899,7 +899,9 @@
+   LE = LineEnding;
+ begin
+   Result:=
+-     'type'+LE
++    '{ T'+ResourceName+' }'+LE
++    +''+LE
++    +'type'+LE
+     +'  T'+ResourceName+' = class('+ResourceClass.ClassName+')'+LE
+     +'  private'+LE
+     +'    { private declarations }'+LE
+Index: ide/include/unix/lazbaseconf.inc
+===================================================================
+--- ide/include/unix/lazbaseconf.inc	(revision 47345)
++++ ide/include/unix/lazbaseconf.inc	(working copy)
+@@ -142,12 +142,16 @@
+   procedure InternalInit;
+  ---------------------------------------------------------------------------}
+ procedure InternalInit;
++var
++  S: string;
+ begin
+   // For the Unix file functions only the slash is a directory separator.
+   // The RTL defines AllowDirectorySeparators ['/','\'] for historical reasons.
+   AllowDirectorySeparators:=['/'];
+-
+-  PrimaryConfigPath:=ExpandFileNameUTF8('~/.lazarus');
++  S := ExpandFileNameUTF8(ParamStrUTF8(0));
++  S := ExtractFileDir(S);
++  S := IncludeTrailingPathDelimiter(S) + 'config';
++  PrimaryConfigPath:= S;
+   SecondaryConfigPath:='/etc/lazarus';
+ end;
+ 
+Index: ide/include/win/lazbaseconf.inc
+===================================================================
+--- ide/include/win/lazbaseconf.inc	(revision 47345)
++++ ide/include/win/lazbaseconf.inc	(working copy)
+@@ -141,6 +141,8 @@
+   procedure InternalInit;
+  ---------------------------------------------------------------------------}
+ procedure InternalInit;
++var
++  S: string;
+ begin
+   DefaultDrive := ExtractFileDrive(ProgramDirectory);
+   DefaultFPCTarget:= GetCompiledTargetCPU + '-' + GetCompiledTargetOS;
+@@ -148,7 +150,11 @@
+   // the last part of the path returned by GetAppConfigDir is the application
+   // name. Replace that by 'lazarus', to make sure that lazbuild uses
+   // the same primary config path
+-  PrimaryConfigPath:= ExtractFilePath(ChompPathDelim(SysToUTF8(GetAppConfigDir(False)))) + 'lazarus';
++  //PrimaryConfigPath:= ExtractFilePath(ChompPathDelim(SysToUTF8(GetAppConfigDir(False)))) + 'lazarus';
++  S := ExpandFileNameUTF8(ParamStrUTF8(0));
++  S := ExtractFileDir(S);
++  S := IncludeTrailingPathDelimiter(S) + 'config';
++  PrimaryConfigPath:= S;
+   SecondaryConfigPath:=ChompPathDelim(ProgramDirectory);
+   DefaultFPCSrcDirs[1] := AppendPathDelim(ProgramDirectory) + 'fpcsrc';
+   DefaultLazarusSrcDirs[1] := DefaultDrive + '\lazarus';
+Index: ide/lazarus.res
+===================================================================
+Cannot display: file marked as a binary type.
+svn:mime-type = application/octet-stream
+Index: ide/main.pp
+===================================================================
+--- ide/main.pp	(revision 47345)
++++ ide/main.pp	(working copy)
+@@ -2031,17 +2031,19 @@
+     Result.Parent := MainIDEBar.pnlSpeedButtons;
+     Result.Images := IDEImages.Images_16;
+     Result.AutoSize := true;
++    Result.EdgeBorders := [];
+   end;
+ 
+ begin
+   // Panel for buttons on the left
+   MainIDEBar.pnlSpeedButtons := TPanel.Create(OwningComponent);
+-  with MainIDEBar.pnlSpeedButtons do 
++  with MainIDEBar.pnlSpeedButtons do
+   begin
+     Name := 'pnlSpeedButtons';
+     Parent := MainIDEBar;
+     Align := alLeft;
+     Caption := '';
++    BorderSpacing.Top := 8;
+     BevelOuter := bvNone;
+     AutoSize := true;
+     Visible := EnvironmentOptions.IDESpeedButtonsVisible;
+Index: ide/mainintf.pas
+===================================================================
+--- ide/mainintf.pas	(revision 47345)
++++ ide/mainintf.pas	(working copy)
+@@ -599,7 +599,9 @@
+ begin
+   LE:=LineEnding;
+   Result:=
+-     'type'+LE
++    '  { T'+ResourceName+' }'+LE
++    +''+LE
++    +'type'+LE
+     +'  T'+ResourceName+' = class('+ResourceClass.ClassName+')'+LE
+     +'  private'+LE
+     +'    { private declarations }'+LE
+Index: ide/projectdefs.pas
+===================================================================
+--- ide/projectdefs.pas	(revision 47345)
++++ ide/projectdefs.pas	(working copy)
+@@ -1280,7 +1280,7 @@
+   // create program source
+   NewSource:='program Project1;'+LineEnding
+     +LineEnding
+-    +'{$mode objfpc}{$H+}'+LineEnding
++    +'{$mode delphi}'+LineEnding
+     +LineEnding
+     +'uses'+LineEnding
+     +'  {$IFDEF UNIX}{$IFDEF UseCThreads}'+LineEnding
+@@ -1397,7 +1397,7 @@
+   // create program source
+   NewSource:='program Project1;'+LineEnding
+     +LineEnding
+-    +'{$mode objfpc}{$H+}'+LineEnding
++    +'{$mode delphi}'+LineEnding
+     +LineEnding
+     +'uses'+LineEnding
+     +'  {$IFDEF UNIX}{$IFDEF UseCThreads}'+LineEnding
+@@ -1462,7 +1462,7 @@
+     // create program source
+     NewSource:='program Project1;'+LineEnding
+       +LineEnding
+-      +'{$mode objfpc}{$H+}'+LineEnding
++      +'{$mode delphi}'+LineEnding
+       +LineEnding
+       +'uses'+LineEnding
+       +'  Classes, SysUtils'+LineEnding
+@@ -1552,7 +1552,7 @@
+   NewSource:=TStringList.Create;
+   NewSource.Add('program Project1;');
+   NewSource.Add('');
+-  NewSource.Add('{$mode objfpc}{$H+}');
++  NewSource.Add('{$mode delphi}');
+   NewSource.Add('');
+   NewSource.Add('uses');
+   NewSource.Add('  {$IFDEF UNIX}{$IFDEF UseCThreads}');
+@@ -1561,10 +1561,9 @@
+   NewSource.Add('  Classes, SysUtils, CustApp');
+   NewSource.Add('  { you can add units after this };');
+   NewSource.Add('');
+-  NewSource.Add('type');
+-  NewSource.Add('');
+   NewSource.Add('  { '+C+' }');
+   NewSource.Add('');
++  NewSource.Add('type');
+   NewSource.Add('  '+C+' = class(TCustomApplication)');
+   NewSource.Add('  protected');
+   NewSource.Add('    procedure DoRun; override;');
+@@ -1698,7 +1697,7 @@
+   // create program source
+   NewSource:='library Project1;'+LineEnding
+     +LineEnding
+-    +'{$mode objfpc}{$H+}'+LineEnding
++    +'{$mode delphi}'+LineEnding
+     +LineEnding
+     +'uses'+LineEnding
+     +'  Classes'+LineEnding
+Index: ide/projectinspector.lfm
+===================================================================
+--- ide/projectinspector.lfm	(revision 47345)
++++ ide/projectinspector.lfm	(working copy)
+@@ -9,16 +9,15 @@
+   ClientHeight = 456
+   ClientWidth = 299
+   OnDropFiles = FormDropFiles
+-  LCLVersion = '1.3'
++  LCLVersion = '1.4.0.1'
+   object ItemsTreeView: TTreeView
+     Left = 0
+-    Height = 378
+-    Top = 78
++    Height = 403
++    Top = 53
+     Width = 299
+     Align = alClient
+     Anchors = [akTop, akLeft, akBottom]
+     BorderSpacing.Top = 2
+-    DefaultItemHeight = 18
+     DragMode = dmAutomatic
+     MultiSelect = True
+     PopupMenu = ItemsPopupMenu
+@@ -36,7 +35,7 @@
+   object BtnPanel: TPanel
+     Left = 0
+     Height = 28
+-    Top = 48
++    Top = 23
+     Width = 299
+     Align = alTop
+     ClientHeight = 28
+@@ -103,8 +102,8 @@
+       AnchorSideTop.Control = SortAlphabeticallyButton
+       AnchorSideTop.Side = asrCenter
+       Left = 91
+-      Height = 28
+-      Top = 0
++      Height = 27
++      Top = 1
+       Width = 205
+       UseFormActivate = True
+       ButtonWidth = 23
+@@ -120,12 +119,14 @@
+   end
+   object ToolBar: TToolBar
+     Left = 0
+-    Height = 48
++    Height = 23
+     Top = 0
+     Width = 299
+     AutoSize = True
+-    ButtonHeight = 46
+-    ShowCaptions = True
++    ButtonHeight = 23
++    EdgeBorders = []
++    EdgeInner = esNone
++    EdgeOuter = esNone
+     TabOrder = 2
+   end
+   object ItemsPopupMenu: TPopupMenu

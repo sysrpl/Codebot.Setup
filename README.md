@@ -10,7 +10,7 @@ The quickest and most straight forward way to setup Free Pascal 3.0 and Lazarus 
 
 Download and run the [Free Pascal 3.0 and Lazarus 1.4](http://cache.codebot.org/lazarus/setup.exe) installer.
 
-This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php). If you would like to build your own Windows installer, the inno setup script project is available on github here.
+This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php). If you would like to build your own Windows installer, the inno setup script project is [available on github here](https://github.com/sysrpl/Codebot.Setup/blob/master/windows/setup.iss).
 
 > **Microsoft Windows Installer Notes**
 > - The setup program is currently not signed by an authority

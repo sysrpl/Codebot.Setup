@@ -1,24 +1,19 @@
 # Free Pascal 3.0 and Lazarus 1.4 Test
 
-This guide will assist users in compiling and configuring test versions 
-of Free Pascal 3.0 and Lazarus 1.4. It currently has sections for 
-Microsoft Windows and Linux, but an OSX section will be added soon.
+This guide will assist users in obtaining test versions of Free Pascal 3.0 and Lazarus 1.4. It currently has sections for Microsoft Windows and Linux. OSX sections will be added soon.
 
 ## Installation
 
-The quickest and least error prone way to setup Free Pascal 3.0 and 
-Lazarus 1.4 is to use the automated installers. These installers will 
-not  interfere with other development envrionments you might already
-have on your computer.
+The quickest and least error prone way to setup Free Pascal 3.0 and Lazarus 1.4 is to use the automated installers. These installers will 
+not interfere with other development envrionments you might already have on your computer.
 
 **Microsoft Windows**
 
 Download and run the [Free Pascal 3.0 and Lazarus 1.4](http://cache.codebot.org/lazarus/setup.exe) installer.
 
-This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php). The script used to build the
-installed is here.
+This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php). The script used to build the installer program is located here.
 
-> **Microsoft Windows Installer Note**
+> **Microsoft Windows Installer Notes**
 > - The setup program is currently not signed by an authority
 > - It will therefore say publisher unknown, which is normal
 
@@ -33,14 +28,13 @@ sh install.fpc-3.0.sh
 
 This installer is a shell script. You can view its source here.
 
-> **Linux Installer Note**
-> - In Linux the install folder defaults to `$HOME/Development/FreePascal`
+> **Linux Installer Notes**
+> - The install folder defaults to `$HOME/Development/FreePascal`
 > - You can easily change this by editing the install.fpc-3.0.sh
 
 ## Manual Installation
 
-This section describes how to install Free Pascal 3.0 and Lazarus 1.4 
-manually.
+This section describes how to install Free Pascal 3.0 and Lazarus 1.4 manually.
 
 ### Windows
 

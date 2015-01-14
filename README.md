@@ -11,9 +11,15 @@ Lazarus 1.4 is to use the automated installers. These install methods
 will not interfere with other development envrionments you might already 
 have on you computer.
 
-If you are using Microsoft Windows download and run the installer program:
+**Microsoft Windows**
 
-Download the [Free Pascal 3.0 and Lazarus 1.4](http://cache.codebot.org/lazarus/setup.exe) installer
+Download and run the [Free Pascal 3.0 and Lazarus 1.4](http://cache.codebot.org/lazarus/setup.exe) installer.
+
+> **Microsoft Windows Note**
+> - The setup program is currently not signed by an authority
+> - It will therefore say publisher unknown, which is normal
+
+**Linux**
 
 If you are using Linux, open a terminal and type:
 

@@ -28,12 +28,12 @@ sh install.fpc-3.0.sh
 The Linux installer is a shell script which builds Free Pascal and Lazarus from sources. If you would like to view or suggest changes to the script, it's [available on github here](https://github.com/sysrpl/Codebot.Setup/blob/master/linux/install.fpc-3.0.sh).
 
 > **Linux Installer Notes**
-> - The install folder defaults to `$HOME/Development/FreePascal`
-> - You can easily change this by editing the install.fpc-3.0.sh
+> - The install folder defaults to $HOME/Development/FreePascal
+> - You can easily change this by editing the install.fpc-3.0.sh file
 
 **OSX**
 
-*comming soon*
+*coming soon*
 
 ## Manual Installation
 
@@ -41,12 +41,12 @@ This section describes how to install Free Pascal 3.0 and Lazarus 1.4 manually.
 
 ### Microsoft Windows
 
-*comming soon*
+*coming soon*
 
 ### Linux
 
-*comming soon*
+*coming soon*
 
 ### OSX
 
-*comming soon*
+*coming soon*

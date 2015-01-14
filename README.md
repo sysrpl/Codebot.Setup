@@ -13,7 +13,7 @@ have on you computer.
 
 If you are using Microsoft Windows download and run the setup program:
 
-[Free Pascal 3.0 and Lazarus 1.4 Test Setup](http://cache.codebot.org/lazarus/setup.exe)
+[Download](http://cache.codebot.org/lazarus/setup.exe) the Free Pascal 3.0 and Lazarus 1.4 installer
 
 If you are using Linux, open a terminal and type:
 
@@ -23,7 +23,7 @@ sh install.fpc-3.0.sh
 ```
 > **Linux Installer Note**
 > - In Linux the install folder defaults to `$HOME/Development/FreePascal`
-> - You can change this folder by editing install.fpc-3.0.sh
+> - You can easily change this by editing the install.fpc-3.0.sh
 
 ## Manual Installation
 

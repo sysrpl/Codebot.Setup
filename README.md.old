@@ -1,63 +1,16 @@
-# Free Pascal 3.0 and Lazarus 1.4 Test Setup
+# Free Pascal 3 and Lazarus Trunk Setup
 
-This guide will assist users in compiling and configuring Free Pascal 3.0 
-and Lazarus 1.4.
+This guide will assist users in compiling and configuring Free Pascal 
+Compiler 3 and Lazarus IDE. The source code
+for these projects will be pulled from their official subversion
+repositories.
 
-This guide is current for Microsoft Windows and Linux. OSX sections will
-be added soon.
+This guide is for all operating systems.
 
-## Automated Installation
-
-The quickest and least error prone way to setup Free Pascal 3.0 and 
-Lazarus 1.4 is to use the automated installers.
-
-If you are using Microsoft Windows download and run the setup program:
-
-[Free Pascal 3.0 and Lazarus 1.4 Test Setup](http://cache.codebot.org/lazarus/setup.exe)
-
-If you are using Linux, open a terminal and type:
-
-```
-wget http://cache.codebot.org/lazarus/install.fpc-3.0.sh
-sh install.fpc-3.0.sh
-```
-### Installer Notes ###
-
-- Installing Free Pascal 3.0 and Lazarus 1.4 Test will not interfere
-with other development envrionments you might already have installed.
-
-### Linux Installer Notes ###
-
-- In Linux it will install to `$HOME/Development/FreePascal`
-- You can change this folder by editing install.fpc-3.0.sh
-
-## Manual Installation
-
-This section describes how to install Free Pascal 3.0 and Lazarus 1.4 
-manually.
-
-### Windows
-
-- Create the folder C:\Development\FreePasscal\bintools
-- Download [bintools.zip](http://cache.codebot.org/bintools.zip)
-- Extract the files to C:\Development\FreePasscal\bintools
-- Add C:\Development\FreePascal\bintools to your path
-- Download a working copy of [FPC 2.6.4 for Windows](http://sourceforge.net/projects/freepascal/files/Win32/2.6.4/)
-- Extract the files and run the setup batch
-- Instruct the batch file to place files in C:\Development\FreePascal\fpc-2.6.4
-- Run cmd.exe and type the following:
-```
-set OLD_PATH=$PATH
-set PATH=%PATH%;%BASE%\fpc-2.6.4\bin\i386-win32
-fpc -iV
-```
-- You should see version number `2.6.4`
-
-
-### Linux
+## Setting up your paths
 
 Create a folder to store the compiler, IDE, and other tools. In this 
-guide I use the variable `BASE` to refer to the `$HOME/Development/Base`
+guide I u s e the variable `BASE` to refer to the `$HOME/Development/Base`
 folder, but you can use whatever folder name or location you prefer.
 
 Open a terminal and create your base folder.
@@ -84,6 +37,9 @@ sudo apt-get install build-essentials subversion
 ```
 Windows:
 
+1. Download [bintools.zip](http://cache.codebot.org/bintools.zip)
+2. Extract the files to C:\Development\Base\bintools
+3. Add C:\Development\Base\bintools to your path
 
 Type `svn help` into the terminal. You should see a help listing for the
 subversion program.
@@ -95,6 +51,7 @@ Compiler 2.6.4 for your platform:
 
 - [FPC 2.6.4 for Debian/Ubuntu 32-bit](http://sourceforge.net/projects/freepascal/files/Linux/2.6.4/fpc-2.6.4.i386-linux.tar/download)
 - [FPC 2.6.4 for Debian/Ubuntu 64-bit](http://sourceforge.net/projects/freepascal/files/Linux/2.6.4/fpc-2.6.4.x86_64-linux.tar/download)
+- [FPC 2.6.4 for Windows](http://sourceforge.net/projects/freepascal/files/Win32/2.6.4/)
 
 Extract the files from the downloaded archive. On Linux you may want to
 backup your already existing FPC configuration file.
@@ -115,8 +72,6 @@ Debian/Ubuntu:
 mv $HOME/.fpc.cfg $BASE/fpc-2.6.4/bin/fpc.cfg
 mv $HOME/.fpc.bak $HOME/.fpc.cfg
 export PPC_CONFIG_PATH=$BASE/fpc-2.6.4/bin
-$BASE/fpc/bin/fpcmkcfg -d basepath=$BASE/fpc/lib/fpc/\$FPCVERSION -o $BASE/fpc/bin/fpc.cfg
-
 OLD_PATH=$PATH
 PATH=$PATH:$BASE/fpc-2.6.4/bin
 ```

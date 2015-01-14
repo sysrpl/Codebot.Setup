@@ -21,10 +21,8 @@ If you are using Linux, open a terminal and type:
 wget http://cache.codebot.org/lazarus/install.fpc-3.0.sh
 sh install.fpc-3.0.sh
 ```
-
-** Linux Installer Notes **
-
-> - In Linux it will install to `$HOME/Development/FreePascal`
+> **Linux Installer Note**
+> - In Linux the install folder defaults to `$HOME/Development/FreePascal`
 > - You can change this folder by editing install.fpc-3.0.sh
 
 ## Manual Installation

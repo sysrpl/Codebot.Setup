@@ -2,20 +2,23 @@
 
 This guide will assist users in compiling and configuring test versions 
 of Free Pascal 3.0 and Lazarus 1.4. It currently has sections for 
-icrosoft Windows and Linux, but an OSX section will be added soon.
+Microsoft Windows and Linux, but an OSX section will be added soon.
 
-## Automated Installation
+## Installation
 
 The quickest and least error prone way to setup Free Pascal 3.0 and 
-Lazarus 1.4 is to use the automated installers. These install methods
-will not interfere with other development envrionments you might already 
-have on you computer.
+Lazarus 1.4 is to use the automated installers. These installers will 
+not  interfere with other development envrionments you might already
+have on your computer.
 
 **Microsoft Windows**
 
 Download and run the [Free Pascal 3.0 and Lazarus 1.4](http://cache.codebot.org/lazarus/setup.exe) installer.
 
-> **Microsoft Windows Note**
+This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php). The script used to build the
+installed is here.
+
+> **Microsoft Windows Installer Note**
 > - The setup program is currently not signed by an authority
 > - It will therefore say publisher unknown, which is normal
 
@@ -27,6 +30,9 @@ If you are using Linux, open a terminal and type:
 wget http://cache.codebot.org/lazarus/install.fpc-3.0.sh
 sh install.fpc-3.0.sh
 ```
+
+This installer is a shell script. You can view its source here.
+
 > **Linux Installer Note**
 > - In Linux the install folder defaults to `$HOME/Development/FreePascal`
 > - You can easily change this by editing the install.fpc-3.0.sh

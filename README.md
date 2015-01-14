@@ -1,8 +1,8 @@
-# Free Pascal 3.0 and Lazarus 1.4 Test Setup
+# Free Pascal 3.0 and Lazarus 1.4 Test
 
-This guide will assist users in compiling and configuring Free Pascal 3.0 
-and Lazarus 1.4. It currently has sections for Microsoft Windows and 
-Linux, but OSX sections will be added soon.
+This guide will assist users in compiling and configuring test versions 
+of Free Pascal 3.0 and Lazarus 1.4. It currently has sections for 
+icrosoft Windows and Linux, but an OSX section will be added soon.
 
 ## Automated Installation
 
@@ -22,7 +22,7 @@ wget http://cache.codebot.org/lazarus/install.fpc-3.0.sh
 sh install.fpc-3.0.sh
 ```
 
-> ** Linux Installer Notes **
+** Linux Installer Notes **
 
 > - In Linux it will install to `$HOME/Development/FreePascal`
 > - You can change this folder by editing install.fpc-3.0.sh

@@ -6,9 +6,9 @@ This guide will assist users in obtaining test versions of Free Pascal 3.0 and L
 
 The quickest and most straight forward way to setup Free Pascal 3.0 and Lazarus 1.4 is to use an automated installer. These automated installers will not interfere with other development envrionments you might already have on your computer.
 
-**Microsoft Windows**
+**On Microsoft Windows**
 
-Download and run the [Free Pascal 3.0 and Lazarus 1.4](http://cache.codebot.org/lazarus/setup.exe) installer.
+__To install:__** Download and run the [Free Pascal 3.0 and Lazarus 1.4](http://cache.codebot.org/lazarus/setup.exe) installer.
 
 This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php). If you would like to build your own Windows installer, the inno setup script project is [available on github here](https://github.com/sysrpl/Codebot.Setup/blob/master/windows/setup.iss).
 
@@ -16,16 +16,16 @@ This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php)
 > - The setup program is currently not signed by an authority
 > - It will therefore say publisher unknown, which is normal
 
-**Linux**
+**On Linux**
 
-If you are using Linux, open a terminal and type:
+__To install:__** Open a terminal and type:
 
 ```
 wget http://cache.codebot.org/lazarus/install.fpc-3.0.sh
 sh install.fpc-3.0.sh
 ```
 
-This installer is a shell script. If you would like to view or suggest changes to the Linux install script, it's available on github here.
+This installer is a shell script. If you would like to view or suggest changes to the Linux install script, it's  [available on github here](https://github.com/sysrpl/Codebot.Setup/blob/master/linux/install.fpc-3.0.sh).
 
 > **Linux Installer Notes**
 > - The install folder defaults to `$HOME/Development/FreePascal`

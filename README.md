@@ -1,6 +1,6 @@
 # Free Pascal 3.0 and Lazarus 1.4 Test
 
-This guide will assist users in obtaining test versions of Free Pascal 3.0 and Lazarus 1.4. It currently has sections for Microsoft Windows and Linux. OSX sections will be added soon.
+This guide will assist users in obtaining test versions of Free Pascal 3.0 and Lazarus 1.4. It currently has sections for Microsoft Windows and Linux, and OSX.
 
 ## Installation
 

@@ -21,7 +21,7 @@ This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php)
 **__To install:__** Open a terminal and type:
 
 ```
-wget http://cache.codebot.org/lazarus/install.fpc-3.0.linux.sh -O install
+wget http://cache.codebot.org/lazarus/install.fpc-3.0.linux.sh -O install.sh
 sh install.sh
 ```
 

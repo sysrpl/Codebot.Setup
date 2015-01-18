@@ -45,7 +45,7 @@ The OSX installer is a shell script which step you through setting up Free Pasca
 > **OSX Installer Notes**
 > - The install folder defaults to $HOME/Development/FreePascal
 > - You can easily change this by editing the install script
-> - After install, you'll need to [code sign the debugger](http://lazarus.codebot.org/darwin/debugger)
+> - After install, you'll need to [code sign the debugger](http://lazarus.codebot.org/home/osx/codesign)
 
 ## Manual Installation
 

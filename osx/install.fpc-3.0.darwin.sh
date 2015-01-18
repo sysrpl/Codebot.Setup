@@ -246,10 +246,10 @@ then
 	echo
 	echo "The gnu debugger is not currently code signed" 
 	echo
-	echo "Read http://lazarus.codebot.org/darwin/debugger for instructions on"
+	echo "Read http://lazarus.codebot.org/home/osx/codesign for instructions on"
 	echo "how to code sign the debugger"
 	echo
-	open "http://lazarus.codebot.org/darwin/debugger"
+	open "http://lazarus.codebot.org/home/osx/codesign"
 	echo
 fi
 

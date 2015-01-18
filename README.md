@@ -21,19 +21,31 @@ This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php)
 **__To install:__** Open a terminal and type:
 
 ```
-wget http://cache.codebot.org/lazarus/install.fpc-3.0.sh
-sh install.fpc-3.0.sh
+wget http://cache.codebot.org/lazarus/install.fpc-3.0.linux.sh -O install
+sh install.sh
 ```
 
-The Linux installer is a shell script which builds Free Pascal and Lazarus from sources. If you would like to view or suggest changes to the script, it's [available on github here](https://github.com/sysrpl/Codebot.Setup/blob/master/linux/install.fpc-3.0.sh).
+The Linux installer is a shell script which builds Free Pascal and Lazarus from sources. If you would like to view or suggest changes to the script, it's [available on github here](https://github.com/sysrpl/Codebot.Setup/blob/master/linux/install.fpc-3.0.linux.sh).
 
 > **Linux Installer Notes**
 > - The install folder defaults to $HOME/Development/FreePascal
-> - You can easily change this by editing the install.fpc-3.0.sh file
+> - You can easily change this by editing the install script
 
 #### OSX
 
-*coming soon*
+**__To install:__** Open a terminal and type:
+
+```
+curl http://cache.codebot.org/lazarus/install.fpc-3.0.darwin.sh -o install.sh
+sh install.sh
+```
+
+The OSX installer is a shell script which step you through setting up Free Pascal and Lazarus on  OSX. It will automatically setup tools, such as xcode, which are needed when developing for OSX. If you would like to view or suggest changes to the script, it's [available on github here](https://github.com/sysrpl/Codebot.Setup/blob/master/osx/install.fpc-3.0.darwin.sh).
+
+> **OSX Installer Notes**
+> - The install folder defaults to $HOME/Development/FreePascal
+> - You can easily change this by editing the install script
+> - After install, you'll need to [code sign the debugger](http://lazarus.codebot.org/darwin/debugger)
 
 ## Manual Installation
 

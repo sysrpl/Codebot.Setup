@@ -256,3 +256,4 @@ fi
 cd "$BASE"
 touch "You can now run 'Lazarus 1.4 Test.app' or drag it to 'Applications'"
 open "$BASE"
+open "$BASE/Lazarus 1.4 Test.app"

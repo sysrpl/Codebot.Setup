@@ -191,6 +191,20 @@ strip -S startlazarus
 # Restore our path
 PATH=$OLDPATH
 
+# Ask for permission to proceed
+read -r -p "Would you like to copy Lazarus 1.4 Test to your applications folder (y/n)? " REPLY
+
+case $REPLY in
+    [yY][eE][sS]|[yY]) 
+		cp "$BASE/Lazarus 1.4 Test.app" "$HOME/.local/share/applications"
+		echo
+		;;
+    *)
+		echo 
+		;;
+esac
+
+
 # Install complete
 echo "Installation complete"
 echo 

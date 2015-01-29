@@ -1,8 +1,8 @@
 #!/bin/sh
-# This is the universal OSX script to install Free Pascal and Lazarus
+# This is the universal Macintosh script to install Free Pascal and Lazarus
 
 # If you need to fix something and or want to contribute, send your 
-# changes to sysrpl at codebot dot org with "osx free pascal install"
+# changes to sysrpl at codebot dot org with "macintosh free pascal install"
 # in the subject line.
 
 # Change the line below to define your own install folder
@@ -150,8 +150,8 @@ fi
 
 # Present a description of this script
 clear
-echo "This is the universal OSX script to install Free Pascal and Lazarus"
-echo "---------------------------------------------------------------------"
+echo "This is the universal Macintosh script to install Free Pascal and Lazarus"
+echo "-------------------------------------------------------------------------"
 echo
 echo "It will install copies of:"
 echo "  Free Pascal $FPC"
@@ -246,14 +246,26 @@ then
 	echo
 	echo "The gnu debugger is not currently code signed" 
 	echo
-	echo "Read http://lazarus.codebot.org/home/osx/codesign for instructions on"
+	echo "Read http://lazarus.codebot.org/setup/macintosh for instructions on"
 	echo "how to code sign the debugger"
 	echo
-	open "http://lazarus.codebot.org/home/osx/codesign"
+	open "http://lazarus.codebot.org/setup/macintosh"
 	echo
 fi
 
+# Ask for permission to proceed
+read -r -p "Would you like to copy Lazarus 1.4 Test to your Applications folder (y/n)? " REPLY
+
+case $REPLY in
+    [yY][eE][sS]|[yY]) 
+		yes | cp "$BASE/Lazarus 1.4 Test.app" /Applications
+		echo
+		;;
+    *)
+		echo 
+		;;
+esac
+
 cd "$BASE"
-touch "You can now run 'Lazarus 1.4 Test.app' or drag it to 'Applications'"
 open "$BASE"
 open "$BASE/Lazarus 1.4 Test.app"

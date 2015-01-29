@@ -86,16 +86,23 @@ case $REPLY in
 		;;
     *)
 		# Exit the script if the user does not type "y" or "Y"
-		echo "Aborting script"
+		echo "done."
 		echo 
 		exit 1
 		;;
 esac
 
+# Ask for permission to create a local application shortcut
+read -r -p "Do you want a shortcut to Lazarus created in your local applications folder (y/n)? " SHORTCUT
+
 # Exit the script if $BASE folder already exist
 if [ -d "$BASE" ]; then
 	echo "Folder \"$BASE\" already exists"
-	echo "Aborting script"
+	echo 
+	echo "Delete this folder or change the variable BASE in this script"
+	echo "Then re-run this script"
+	echo 
+	echo "done."
 	echo 
 	exit 1
 fi
@@ -201,11 +208,7 @@ strip -S startlazarus
 # Restore our path
 PATH=$OLDPATH
 
-# Ask for permission to proceed
-echo
-read -r -p "Would you like to copy Lazarus 1.4 Test to your applications folder (y/n)? " REPLY
-
-case $REPLY in
+case $SHORTCUT in
     [yY][eE][sS]|[yY]) 
 		cp "$BASE/lazarus.desktop" "$HOME/.local/share/applications"
 		echo
@@ -216,7 +219,7 @@ case $REPLY in
 esac
 
 # Install complete
-echo "Installation complete"
+echo "Free Pascal and Lazarus install complete"
 echo 
 
 # Start up our new lazarus

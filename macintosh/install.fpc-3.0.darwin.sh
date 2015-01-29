@@ -254,19 +254,6 @@ then
 	echo
 fi
 
-# Ask for permission to proceed
-read -r -p "Would you like to copy Lazarus 1.4 Test to your Applications folder (y/n)? " REPLY
-
-case $REPLY in
-    [yY][eE][sS]|[yY]) 
-		yes | cp "$BASE/Lazarus 1.4 Test.app" /Applications
-		echo
-		;;
-    *)
-		echo 
-		;;
-esac
-
 cd "$BASE"
 open "$BASE"
 open "$BASE/Lazarus 1.4 Test.app"

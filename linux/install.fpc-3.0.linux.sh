@@ -136,6 +136,15 @@ rm $BASE/fpc-$FPC.7z
 cd $BASE/fpc
 make all
 make install INSTALL_PREFIX=$BASE/fpc
+# Make cross compilers
+if [ "$CPU" = "i686" ]
+then
+	make crossinstall OS_TARGET=linux CPU_TARGET=x86_64 INSTALL_PREFIX=$BASE/fpc
+else
+	make crossinstall OS_TARGET=linux CPU_TARGET=i386 INSTALL_PREFIX=$BASE/fpc	
+fi
+make crossinstall OS_TARGET=win32 CPU_TARGET=i386 INSTALL_PREFIX=$BASE/fpc
+make crossinstall OS_TARGET=win64 CPU_TARGET=x86_64 INSTALL_PREFIX=$BASE/fpc
 cp $BASE/fpc/lib/fpc/$FPC_BUILD/* $BASE/fpc/bin
 
 # Delete the temporary version of fpc stable
@@ -192,18 +201,18 @@ strip -S startlazarus
 PATH=$OLDPATH
 
 # Ask for permission to proceed
+echo
 read -r -p "Would you like to copy Lazarus 1.4 Test to your applications folder (y/n)? " REPLY
 
 case $REPLY in
     [yY][eE][sS]|[yY]) 
-		cp "$BASE/Lazarus 1.4 Test.app" "$HOME/.local/share/applications"
+		cp "$BASE/lazarus.desktop" "$HOME/.local/share/applications"
 		echo
 		;;
     *)
 		echo 
 		;;
 esac
-
 
 # Install complete
 echo "Installation complete"

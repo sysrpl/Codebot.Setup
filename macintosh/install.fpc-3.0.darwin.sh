@@ -1,4 +1,5 @@
 #!/bin/sh
+# Author of this script: http://lazarus.codebot.org
 # This is the universal Macintosh script to install Free Pascal and Lazarus
 
 # If you need to fix something and or want to contribute, send your 

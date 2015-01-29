@@ -1,6 +1,6 @@
 # Free Pascal 3.0 and Lazarus 1.4 Test
 
-This guide will assist users in obtaining test versions of Free Pascal 3.0 and Lazarus 1.4. It currently has sections for Microsoft Windows and Linux, and OSX.
+This guide will assist users in obtaining test versions of Free Pascal 3.0 and Lazarus 1.4. It currently has sections for Microsoft Windows and Linux, and Macintosh.
 
 ## Installation
 
@@ -40,7 +40,7 @@ curl http://cache.codebot.org/lazarus/install.fpc-3.0.darwin.sh -o install.sh
 sh install.sh
 ```
 
-The OSX installer is a shell script which step you through setting up Free Pascal and Lazarus on  OSX. It will automatically setup tools, such as xcode, which are needed when developing for OSX. If you would like to view or suggest changes to the script, it's [available on github here](https://github.com/sysrpl/Codebot.Setup/blob/master/machintosh/install.fpc-3.0.darwin.sh).
+The OSX installer is a shell script which step you through setting up Free Pascal and Lazarus on  OSX. It will automatically setup tools, such as xcode, which are needed when developing for OSX. If you would like to view or suggest changes to the script, it's [available on github here](https://github.com/sysrpl/Codebot.Setup/blob/master/macintosh/install.fpc-3.0.darwin.sh).
 
 > **OSX Installer Notes**
 > - The install folder defaults to $HOME/Development/FreePascal

@@ -219,6 +219,7 @@ case $SHORTCUT in
 esac
 
 # Install complete
+xdg-open "http://www.getlazarus.org/installed/?platform=linux" &> /dev/null
 echo "Free Pascal and Lazarus install complete"
 echo 
 

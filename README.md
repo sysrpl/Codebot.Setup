@@ -8,7 +8,7 @@ The quickest and most straight forward way to setup Free Pascal 3.0 and Lazarus 
 
 #### Windows
 
-**__To install:__** Download and run the [Free Pascal 3.0 and Lazarus 1.4](http://cache.getlazarus.org/download/?platform=windows) installer.
+**__To install:__** Download and run the [Free Pascal 3.0 and Lazarus 1.4](http://www.getlazarus.org/download/?platform=windows) installer.
 
 This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php). If you would like to build your own Windows installer, the inno setup script project is [available on github here](https://github.com/sysrpl/Codebot.Setup/blob/master/windows/setup.iss).
 
@@ -21,7 +21,7 @@ This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php)
 **__To install:__** Open a terminal and type:
 
 ```
-wget http://cache.getlazarus.org/download/?platform=linux
+wget http://www.getlazarus.org/download/?platform=linux
 sh setup.sh
 ```
 
@@ -36,7 +36,7 @@ The Linux installer is a shell script which builds Free Pascal and Lazarus from 
 **__To install:__** Open a terminal and type:
 
 ```
-wget http://cache.getlazarus.org/download/?platform=machintosh
+wget http://www.getlazarus.org/download/?platform=macintosh
 sh setup.sh
 ```
 

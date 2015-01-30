@@ -240,6 +240,7 @@ rm startlazarus
 ln -s ../../../startlazarus startlazarus
 cd $BASE
 
+open "http://www.getlazarus.org/installed/?platform=macintosh"
 echo "Free Pascal and Lazarus install complete"
 
 if [[ $SIGNED == *"object is not signed"* ]]

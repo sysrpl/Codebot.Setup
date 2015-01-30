@@ -21,7 +21,7 @@ This installer is built using [Inno Setup](http://www.jrsoftware.org/isinfo.php)
 **__To install:__** Open a terminal and type:
 
 ```
-wget http://www.getlazarus.org/download/?platform=linux
+curl http://www.getlazarus.org/download/?platform=linux
 sh setup.sh
 ```
 
@@ -36,7 +36,7 @@ The Linux installer is a shell script which builds Free Pascal and Lazarus from 
 **__To install:__** Open a terminal and type:
 
 ```
-wget http://www.getlazarus.org/download/?platform=macintosh
+curl http://www.getlazarus.org/download/?platform=macintosh
 sh setup.sh
 ```
 

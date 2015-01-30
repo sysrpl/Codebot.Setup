@@ -1,9 +1,9 @@
 #!/bin/sh
-# Author of this script: http://lazarus.codebot.org
+# Author of this script: http://www.getlazarus.org
 # This is the universal Macintosh script to install Free Pascal and Lazarus
 
 # If you need to fix something and or want to contribute, send your 
-# changes to sysrpl at codebot dot org with "macintosh free pascal install"
+# changes to admin at getlazarus dot org with "macintosh free pascal install"
 # in the subject line.
 
 # Change the line below to define your own install folder
@@ -200,7 +200,7 @@ cd "$BASE"
 
 # Download and extract the archive
 ARCHIVE="fpc-$FPC.$OS_TARGET.7z"
-curl "http://cache.codebot.org/lazarus/$ARCHIVE" -o "$ARCHIVE"
+curl "http://cache.getlazarus.org/archives/$ARCHIVE" -o "$ARCHIVE"
 7za x "$ARCHIVE"
 rm "$ARCHIVE"
 
@@ -247,10 +247,10 @@ then
 	echo
 	echo "The gnu debugger is not currently code signed" 
 	echo
-	echo "Read http://lazarus.codebot.org/setup/macintosh for instructions on"
+	echo "Read http://www.getlazarus.org/setup/macintosh for instructions on"
 	echo "how to code sign the debugger"
 	echo
-	open "http://lazarus.codebot.org/setup/macintosh"
+	open "http://www.getlazarus.org/setup/macintosh"
 	echo
 fi
 

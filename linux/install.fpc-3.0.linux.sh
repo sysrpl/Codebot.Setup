@@ -1,9 +1,9 @@
 #!/bin/sh
-# Author of this script: http://lazarus.codebot.org
+# Author of this script: http://www.getlazarus.org
 # This is the universal Linux script to install Free Pascal and Lazarus
 
 # If you need to fix something and or want to contribute, send your 
-# changes to sysrpl at codebot dot org with "linux free pascal install"
+# changes to admin at getlazarus dot org with "linux free pascal install"
 # in the subject line.
 
 # Change the line below to define your own install folder
@@ -119,8 +119,8 @@ then
 	CPU="i386"
 fi
 
-# Download from my Amazon S3 bucket as a courtesy to others
-URL=http://cache.codebot.org/lazarus
+# Download from our Amazon S3 bucket 
+URL=http://cache.getlazarus.org/archives
 
 # Download a temporary version of fpc stable
 wget -P $BASE $URL/fpc-$FPC_STABLE.$CPU-linux.7z

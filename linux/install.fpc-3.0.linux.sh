@@ -93,7 +93,13 @@ case $REPLY in
 esac
 
 # Ask for permission to create a local application shortcut
-read -r -p "Do you want a shortcut to Lazarus created in your local applications folder (y/n)? " SHORTCUT
+echo "After install do you want to Lazarus shortcut created a in:"
+read -r -p "$HOME/.local/share/applications (y/n)? " SHORTCUT
+echo 
+
+# Block comment for testing
+: <<'COMMENT'
+COMMENT
 
 # Exit the script if $BASE folder already exist
 if [ -d "$BASE" ]; then
@@ -188,6 +194,7 @@ ORIGIN="/home/delluser/Development/Base"
 replace "$BASE/lazarus/config" "*.xml" "$ORIGIN" "$BASE"
 replace "$BASE/lazarus" "lazarus.sh" "$ORIGIN" "$BASE"
 replace "$BASE/lazarus" "lazarus.desktop" "$ORIGIN" "$BASE"
+replace "$BASE/lazarus" "lazarus.desktop" "Version=$LAZ" ""
 mv $BASE/lazarus/lazarus.desktop $BASE/lazarus.desktop
 
 # Apply a patch, see changes.patch for details
@@ -208,9 +215,14 @@ strip -S startlazarus
 # Restore our path
 PATH=$OLDPATH
 
+# Install an application shortcut
 case $SHORTCUT in
     [yY][eE][sS]|[yY]) 
-		cp "$BASE/lazarus.desktop" "$HOME/.local/share/applications"
+		if type desktop-file-install > /dev/null; then
+			desktop-file-install --dir="$HOME/.local/share/applications" "$BASE/lazarus.desktop"
+		else
+			cp "$BASE/lazarus.desktop" "$HOME/.local/share/applications"
+		fi
 		echo
 		;;
     *)
@@ -219,7 +231,7 @@ case $SHORTCUT in
 esac
 
 # Install complete
-xdg-open "http://www.getlazarus.org/installed/?platform=linux" &> /dev/null
+xdg-open "http://www.getlazarus.org/installed/?platform=linux" &> /dev/null;
 echo "Free Pascal and Lazarus install complete"
 echo 
 

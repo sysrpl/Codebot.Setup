@@ -21,6 +21,10 @@ if [ "$(id -u)" = "0" ]; then
    exit 1
 fi
 
+# Block comment for testing
+: <<'COMMENT'
+COMMENT
+
 # Define our Free Pascal and Lazarus versions numbers
 FPC=3.0
 LAZ=1.4
@@ -147,8 +151,6 @@ then
 	read -p "Press [ENTER] to continue"
 fi
 
-# TODO Provide missing program install command help based on current distro
-
 # Present a description of this script
 clear
 echo "This is the universal Macintosh script to install Free Pascal and Lazarus"
@@ -182,6 +184,11 @@ case $REPLY in
 		;;
 esac
 
+# Ask for permission to create an application shortcut
+echo "After install do you want to copy 'Lazarus 1.4 Test.app' to:"
+read -r -p "/Applications (y/n)? " SHORTCUT
+echo 
+
 # Exit the script if $BASE folder already exist
 if [ -d "$BASE" ]; then
 	echo "Folder \"$BASE\" already exists"
@@ -203,9 +210,6 @@ ARCHIVE="fpc-$FPC.$OS_TARGET.7z"
 curl "http://cache.getlazarus.org/archives/$ARCHIVE" -o "$ARCHIVE"
 7za x "$ARCHIVE"
 rm "$ARCHIVE"
-
-# fi
-# End block comment
 
 # function Replace(folder, search, replace, filespec)
 replace() {
@@ -239,6 +243,16 @@ cd "$BASE/lazarus/startlazarus.app/Contents/MacOS"
 rm startlazarus
 ln -s ../../../startlazarus startlazarus
 cd $BASE
+
+case $SHORTCUT in
+    [yY][eE][sS]|[yY]) 
+		cp -r "$BASE/Lazarus 1.4 Test.app" "/Applications/Lazarus 1.4 Test.app" &> /dev/null
+		echo
+		;;
+    *)
+		echo 
+		;;
+esac
 
 open "http://www.getlazarus.org/installed/?platform=macintosh"
 echo "Free Pascal and Lazarus install complete"

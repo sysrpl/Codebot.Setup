@@ -136,7 +136,7 @@ rm $BASE/fpc-$FPC_STABLE.$CPU-linux.7z
 # Add fpc stable to our path
 export PPC_CONFIG_PATH=$BASE/fpc-$FPC_STABLE/bin
 OLDPATH=$PATH
-PATH=$OLDPATH:$PPC_CONFIG_PATH
+PATH=$PPC_CONFIG_PATH:$OLDPATH
 
 # Generate a valid fpc.cfg file
 $PPC_CONFIG_PATH/fpcmkcfg -d basepath=$BASE/fpc-$FPC_STABLE/lib/fpc/\$FPCVERSION -o $PPC_CONFIG_PATH/fpc.cfg
@@ -167,7 +167,7 @@ rm -rf $BASE/fpc-$FPC_STABLE
 
 # Add the compiler we just built to our paths
 PPC_CONFIG_PATH=$BASE/fpc/bin
-PATH=$OLDPATH:$PPC_CONFIG_PATH
+PATH=$PPC_CONFIG_PATH:$OLDPATH
 
 # Generate another valid fpc.cfg file
 $PPC_CONFIG_PATH/fpcmkcfg -d basepath=$BASE/fpc/lib/fpc/\$FPCVERSION -o $PPC_CONFIG_PATH/fpc.cfg

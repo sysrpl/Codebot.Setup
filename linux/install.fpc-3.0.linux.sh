@@ -134,9 +134,9 @@ wget -P $BASE $URL/fpc-$FPC_STABLE.$CPU-linux.7z
 rm $BASE/fpc-$FPC_STABLE.$CPU-linux.7z
 
 # Add fpc stable to our path
-export PPC_CONFIG_PATH=$BASE/fpc-$FPC_STABLE/bin
 OLDPATH=$PATH
-PATH=$PPC_CONFIG_PATH:$OLDPATH
+export PPC_CONFIG_PATH=$BASE/fpc-$FPC_STABLE/bin
+export PATH=$PPC_CONFIG_PATH:$OLDPATH
 
 # Generate a valid fpc.cfg file
 $PPC_CONFIG_PATH/fpcmkcfg -d basepath=$BASE/fpc-$FPC_STABLE/lib/fpc/\$FPCVERSION -o $PPC_CONFIG_PATH/fpc.cfg
@@ -166,8 +166,8 @@ cp $BASE/fpc/lib/fpc/$FPC_BUILD/* $BASE/fpc/bin
 rm -rf $BASE/fpc-$FPC_STABLE
 
 # Add the compiler we just built to our paths
-PPC_CONFIG_PATH=$BASE/fpc/bin
-PATH=$PPC_CONFIG_PATH:$OLDPATH
+export PPC_CONFIG_PATH=$BASE/fpc/bin
+export PATH=$PPC_CONFIG_PATH:$OLDPATH
 
 # Generate another valid fpc.cfg file
 $PPC_CONFIG_PATH/fpcmkcfg -d basepath=$BASE/fpc/lib/fpc/\$FPCVERSION -o $PPC_CONFIG_PATH/fpc.cfg

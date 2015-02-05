@@ -4,8 +4,8 @@
 #define MyAppName "Free Pascal 3.0 and Lazarus 1.4 Test"
 #define MyAppShort "Lazarus 1.4 Test"
 #define MyAppVersion "3.0"
-#define MyAppPublisher "Codebot"
-#define MyAppURL "http://freepascal.codebot.org/"
+#define MyAppPublisher "www.getlazarus.org"
+#define MyAppURL "http://www.getlazarus.org/"
 #define MyAppExeName "lazarus.exe"
 
 [Setup]
@@ -20,14 +20,19 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName=C:\Development\Freepascal
+DefaultDirName=C:\Development\FreePascal
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
+InfoBeforeFile=C:\Development\RC1\readme.txt
 LicenseFile=C:\Development\RC1\lazarus\COPYING.LGPL.txt
 OutputDir=C:\Development\RC1Setup
 OutputBaseFilename=setup
 ;Compression=zip
 SolidCompression=yes
+VersionInfoVersion=3.0.1.3
+VersionInfoCopyright=None
+WizardImageFile=large.bmp
+WizardSmallImageFile=small.bmp
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -38,6 +43,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "C:\Development\RC1\fpc\*"; DestDir: "{app}\fpc"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\Development\RC1\lazarus\*"; DestDir: "{app}\lazarus"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "small.bmp"; Flags: dontcopy
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -50,5 +56,6 @@ Name: "{app}\{#MyAppShort}"; Filename: "{app}\lazarus\{#MyAppExeName}"
 [Run]
 Filename: "{app}\fpc\bin\i386-win32\fpcmkcfg.exe"; Parameters: "-d ""basepath={app}\fpc"" -o ""{app}\fpc\bin\i386-win32\fpc.cfg"""; Flags: runhidden
 Filename: "{app}\fpc\bin\i386-win32\fart.exe"; Parameters: """{app}\lazarus\config\*.xml"" C:\Development\RC1 ""{app}"""; Flags: runhidden
+Filename: "http://www.getlazarus.org/installed/?platform=windows"; Flags: shellexec runasoriginaluser
 Filename: "{app}\lazarus\{#MyAppExeName}"; Flags: nowait postinstall skipifsilent
 

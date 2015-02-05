@@ -153,8 +153,8 @@ fi
 
 # Present a description of this script
 clear
-echo "This is the universal Macintosh script to install Free Pascal and Lazarus"
-echo "-------------------------------------------------------------------------"
+echo "This is the universal Mac script to install Free Pascal and Lazarus Test"
+echo "------------------------------------------------------------------------"
 echo
 echo "It will install copies of:"
 echo "  Free Pascal $FPC"

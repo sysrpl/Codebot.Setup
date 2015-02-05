@@ -61,8 +61,8 @@ require "7za" "p7zip-full"
 
 # Present a description of this script
 clear
-echo "This is the universal Linux script to install Free Pascal and Lazarus"
-echo "---------------------------------------------------------------------"
+echo "This is the universal Linux script to install Free Pascal and Lazarus test"
+echo "--------------------------------------------------------------------------"
 echo
 echo "It will download the sources for:"
 echo "  Free Pascal $FPC"

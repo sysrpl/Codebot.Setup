@@ -125,6 +125,13 @@ then
 	CPU="i386"
 fi
 
+# Note we use our bucket instead of sourceforge or svn for the following 
+# reason: 
+#   It would be unethical to leach other peoples bandwidth and data
+#   transfer charges. As such, we rehost the same fpc stable binary, fpc 
+#   test sources, and lazarus test sources from sourceforge and free
+#   pascal svn servers using our own Amazon S3 bucket.
+
 # Download from our Amazon S3 bucket 
 URL=http://cache.getlazarus.org/archives
 

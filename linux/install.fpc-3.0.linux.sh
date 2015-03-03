@@ -15,13 +15,9 @@ BASE=$HOME/Development/FreePascal
 
 # TODO Prompt the user for the install folder and provide BASE as the default
 
-# Define our Free Pascal and Lazarus versions numbers
-FPC=3.0
-LAZ=1.4
-
 # The full version number of the stable compiler and the one we are building
 FPC_STABLE=2.6.4
-FPC_BUILD=3.0.1
+FPC_BUILD=3.1.1
 
 # TODO Allow the user to pick their compiler and ide versions
 
@@ -67,12 +63,12 @@ require "7za" "p7zip-full"
 
 # Present a description of this script
 clear
-echo "This is the universal Linux script to install Free Pascal and Lazarus test"
+echo "This is the universal Linux script to install Free Pascal and Lazarus"
 echo "--------------------------------------------------------------------------"
 echo
 echo "It will download the sources for:"
-echo "  Free Pascal $FPC"
-echo "  Lazarus $LAZ"
+echo "  Free Pascal and Lazarus Nighly Builds"
+echo " "
 echo
 echo "Then build working versions in folder:"
 echo "  $BASE"
@@ -107,10 +103,50 @@ echo
 : <<'COMMENT'
 COMMENT
 
-# Exit the script if $BASE folder already exist
-if [ -d "$BASE" ]; then
-	echo "Folder \"$BASE\" already exists"
+# Prompt to remove the $BASE/fpc if it exists
+if [ -d "$BASE/fpc" ]; then
+	echo "Folder \"$BASE/fpc\" already exists"
+	read -r -p "Delete (y/n)? " DELETE
+	case $DELETE in
+		[yY][eE][sS]|[yY]) 
+			rm -rf "$BASE/fpc"
+			echo
+			;;
+		*)
+			echo 
+			;;
+	esac
+fi
+
+# Exit the script if $BASE/fpc still exists
+if [ -d "$BASE/fpc" ]; then
+	echo "Folder \"$BASE/fpc\" was not deleted"
+	echo "Delete this folder or change the variable BASE in this script"
+	echo "Then re-run this script"
 	echo 
+	echo "done."
+	echo 
+	exit 1
+fi
+
+# Prompt to remove the $BASE/lazarus if it exists
+if [ -d "$BASE/lazarus" ]; then
+	echo "Folder \"$BASE/lazarus\" already exists"
+	read -r -p "Delete (y/n)? " DELETE
+	case $DELETE in
+		[yY][eE][sS]|[yY]) 
+			rm -rf "$BASE/lazarus"
+			echo
+			;;
+		*)
+			echo 
+			;;
+	esac
+fi
+
+# Exit the script if $BASE/lazarus still exists
+if [ -d "$BASE/lazarus" ]; then
+	echo "Folder \"$BASE/lazarus\" was not deleted"
 	echo "Delete this folder or change the variable BASE in this script"
 	echo "Then re-run this script"
 	echo 
@@ -155,9 +191,9 @@ export PATH=$PPC_CONFIG_PATH:$OLDPATH
 $PPC_CONFIG_PATH/fpcmkcfg -d basepath=$BASE/fpc-$FPC_STABLE/lib/fpc/\$FPCVERSION -o $PPC_CONFIG_PATH/fpc.cfg
 
 # Download the new compiler source code
-wget -P $BASE $URL/fpc-$FPC.7z
-7za x $BASE/fpc-$FPC.7z -o$BASE
-rm $BASE/fpc-$FPC.7z
+wget -P $BASE $URL/fpc.7z
+7za x $BASE/fpc.7z -o$BASE
+rm $BASE/fpc.7z
 
 # Make the new compiler
 cd $BASE/fpc
@@ -186,9 +222,9 @@ export PATH=$PPC_CONFIG_PATH:$OLDPATH
 $PPC_CONFIG_PATH/fpcmkcfg -d basepath=$BASE/fpc/lib/fpc/\$FPCVERSION -o $PPC_CONFIG_PATH/fpc.cfg
 
 # Download the lazarus source code
-wget -P $BASE $URL/lazarus-$LAZ.7z
-7za x $BASE/lazarus-$LAZ.7z -o$BASE
-rm $BASE/lazarus-$LAZ.7z
+wget -P $BASE $URL/lazarus.7z
+7za x $BASE/lazarus.7z -o$BASE
+rm $BASE/lazarus.7z
 cd $BASE/lazarus
 
 # function replace(folder, files, before, after) 
@@ -207,7 +243,9 @@ ORIGIN="/home/delluser/Development/Base"
 replace "$BASE/lazarus/config" "*.xml" "$ORIGIN" "$BASE"
 replace "$BASE/lazarus" "lazarus.sh" "$ORIGIN" "$BASE"
 replace "$BASE/lazarus" "lazarus.desktop" "$ORIGIN" "$BASE"
-replace "$BASE/lazarus" "lazarus.desktop" "Version=$LAZ" ""
+
+chmod +x $BASE/lazarus/lazarus.desktop
+chmod +x $BASE/lazarus/lazarus.sh
 mv $BASE/lazarus/lazarus.desktop $BASE/lazarus.desktop
 
 # Apply a patch, see changes.patch for details

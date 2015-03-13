@@ -248,8 +248,8 @@ chmod +x $BASE/lazarus/lazarus.desktop
 chmod +x $BASE/lazarus/lazarus.sh
 mv $BASE/lazarus/lazarus.desktop $BASE/lazarus.desktop
 
-# Apply a patch, see changes.patch for details
-patch -p0 -i $BASE/lazarus/changes.diff
+# Patch has already been applied, see changes.patch for details
+# patch -p0 -i $BASE/lazarus/changes.diff
 
 # Make the new lazarus
 make all

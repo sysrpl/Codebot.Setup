@@ -1,32 +1,7 @@
 Index: components/ideintf/objectinspector.lfm
 ===================================================================
---- components/ideintf/objectinspector.lfm	(revision 47345)
+--- components/ideintf/objectinspector.lfm	(revision 49893)
 +++ components/ideintf/objectinspector.lfm	(working copy)
-@@ -1,7 +1,7 @@
- object ObjectInspectorDlg: TObjectInspectorDlg
--  Left = 338
-+  Left = 483
-   Height = 669
--  Top = 162
-+  Top = 103
-   Width = 300
-   BorderStyle = bsSizeToolWin
-   Caption = 'ObjectInspectorDlg'
-@@ -8,11 +8,11 @@
-   ClientHeight = 669
-   ClientWidth = 300
-   KeyPreview = True
--  LCLVersion = '1.3'
-+  LCLVersion = '1.4.0.1'
-   object StatusBar: TStatusBar
-     Left = 0
--    Height = 23
--    Top = 646
-+    Height = 21
-+    Top = 648
-     Width = 300
-     Panels = <    
-       item
 @@ -24,11 +24,11 @@
    end
    object AvailPersistentComboBox: TComboBox
@@ -41,34 +16,7 @@ Index: components/ideintf/objectinspector.lfm
      OnCloseUp = AvailComboBoxCloseUp
      Style = csDropDownList
      TabOrder = 0
-@@ -36,9 +36,10 @@
-   object ComponentPanel: TPanel
-     Left = 0
-     Height = 184
--    Top = 23
-+    Top = 31
-     Width = 300
-     Align = alTop
-+    BevelOuter = bvNone
-     ClientHeight = 184
-     ClientWidth = 300
-     TabOrder = 2
-@@ -47,10 +48,10 @@
-       AnchorSideLeft.Side = asrBottom
-       AnchorSideTop.Control = FilterLabel
-       AnchorSideTop.Side = asrCenter
--      Left = 92
--      Height = 28
--      Top = 3
--      Width = 204
-+      Left = 94
-+      Height = 27
-+      Top = 2
-+      Width = 202
-       UseFormActivate = True
-       ButtonWidth = 23
-       NumGlyphs = 1
-@@ -61,9 +62,9 @@
+@@ -62,9 +62,9 @@
      end
      object FilterLabel: TLabel
        Left = 3
@@ -82,7 +30,7 @@ Index: components/ideintf/objectinspector.lfm
        ParentColor = False
 Index: components/ideintf/projectintf.pas
 ===================================================================
---- components/ideintf/projectintf.pas	(revision 47345)
+--- components/ideintf/projectintf.pas	(revision 49893)
 +++ components/ideintf/projectintf.pas	(working copy)
 @@ -825,7 +825,7 @@
  
@@ -113,9 +61,506 @@ Index: components/ideintf/projectintf.pas
      +'  T'+ResourceName+' = class('+ResourceClass.ClassName+')'+LE
      +'  private'+LE
      +'    { private declarations }'+LE
+Index: ide/aboutfrm.lfm
+===================================================================
+--- ide/aboutfrm.lfm	(revision 49893)
++++ ide/aboutfrm.lfm	(working copy)
+@@ -25,94 +25,92 @@
+     OnChange = NotebookPageChanged
+     object VersionPage: TTabSheet
+       Caption = 'Version'
+-      ClientHeight = 298
+-      ClientWidth = 452
++      ClientHeight = 295
++      ClientWidth = 456
+       object LogoImage: TImage
+         AnchorSideLeft.Control = VersionPage
+         AnchorSideLeft.Side = asrCenter
+         AnchorSideTop.Control = VersionPage
+         AnchorSideTop.Side = asrCenter
+-        Left = 1
++        Left = 3
+         Height = 300
+-        Top = -1
++        Top = -3
+         Width = 450
+         AutoSize = True
+       end
+       object VersionLabel: TLabel
+-        AnchorSideLeft.Control = LogoImage
+-        AnchorSideLeft.Side = asrCenter
+         AnchorSideTop.Control = LogoImage
+-        Left = 199
+-        Height = 15
+-        Top = 120
+-        Width = 55
+-        Alignment = taCenter
++        Left = 6
++        Height = 17
++        Top = 180
++        Width = 444
++        Align = alBottom
++        Alignment = taRightJustify
+         BorderSpacing.Top = 115
+         BorderSpacing.Around = 6
+         Caption = 'Version #:'
+-        Font.Color = clSilver
++        Font.Color = clBlack
+         Font.Style = [fsBold]
+         ParentColor = False
+         ParentFont = False
+       end
+       object BuildDateLabel: TLabel
+-        AnchorSideLeft.Control = LogoImage
+-        AnchorSideLeft.Side = asrCenter
+         AnchorSideTop.Control = VersionLabel
+         AnchorSideTop.Side = asrBottom
+-        Left = 213
+-        Height = 15
+-        Top = 141
+-        Width = 27
+-        Alignment = taCenter
++        Left = 6
++        Height = 17
++        Top = 203
++        Width = 444
++        Align = alBottom
++        Alignment = taRightJustify
+         BorderSpacing.Around = 6
+         Caption = 'Date:'
+-        Font.Color = clSilver
++        Font.Color = clBlack
+         ParentColor = False
+         ParentFont = False
+       end
+       object RevisionLabel: TLabel
+-        AnchorSideLeft.Control = LogoImage
+-        AnchorSideLeft.Side = asrCenter
+         AnchorSideTop.Control = FPCVersionLabel
+         AnchorSideTop.Side = asrBottom
+-        Left = 190
+-        Height = 15
+-        Top = 183
+-        Width = 72
++        Left = 6
++        Height = 17
++        Top = 249
++        Width = 444
++        Align = alBottom
++        Alignment = taRightJustify
+         BorderSpacing.Around = 6
+         Caption = 'RevisionLabel'
+-        Font.Color = clSilver
++        Font.Color = clBlack
+         ParentColor = False
+         ParentFont = False
+       end
+       object PlatformLabel: TLabel
+-        AnchorSideLeft.Control = LogoImage
+-        AnchorSideLeft.Side = asrCenter
+         AnchorSideTop.Control = RevisionLabel
+         AnchorSideTop.Side = asrBottom
+-        Left = 189
+-        Height = 15
+-        Top = 204
+-        Width = 74
++        Left = 6
++        Height = 17
++        Top = 272
++        Width = 444
++        Align = alBottom
++        Alignment = taRightJustify
+         BorderSpacing.Around = 6
+         Caption = 'PlatformLabel'
+-        Font.Color = clSilver
++        Font.Color = clBlack
+         ParentColor = False
+         ParentFont = False
+       end
+       object FPCVersionLabel: TLabel
+-        AnchorSideLeft.Control = LogoImage
+-        AnchorSideLeft.Side = asrCenter
+         AnchorSideTop.Control = BuildDateLabel
+         AnchorSideTop.Side = asrBottom
+-        Left = 182
+-        Height = 15
+-        Top = 162
+-        Width = 88
++        Left = 6
++        Height = 17
++        Top = 226
++        Width = 444
++        Align = alBottom
++        Alignment = taRightJustify
+         BorderSpacing.Around = 6
+         Caption = 'FPCVersionLabel'
+-        Font.Color = clSilver
++        Font.Color = clBlack
+         ParentColor = False
+         ParentFont = False
+       end
+@@ -119,8 +117,8 @@
+     end
+     object AboutPage: TTabSheet
+       Caption = 'About'
+-      ClientHeight = 299
+-      ClientWidth = 458
++      ClientHeight = 295
++      ClientWidth = 456
+       object OfficialLabel: TLabel
+         AnchorSideLeft.Control = AboutPage
+         AnchorSideBottom.Control = DocumentationLabel
+@@ -223,10 +221,10 @@
+       AnchorSideTop.Side = asrCenter
+       AnchorSideBottom.Control = Owner
+       AnchorSideBottom.Side = asrBottom
+-      Left = 193
+-      Height = 26
+-      Top = 12
+-      Width = 75
++      Left = 196
++      Height = 29
++      Top = 11
++      Width = 69
+       AutoSize = True
+       BorderSpacing.Around = 6
+       Cancel = True
+Index: ide/aboutfrm.pas
+===================================================================
+--- ide/aboutfrm.pas	(revision 49893)
++++ ide/aboutfrm.pas	(working copy)
+@@ -171,7 +171,6 @@
+   AcknowledgementsPage.DoubleBuffered := True;
+   miVerToClipboard.Caption := lisVerToClipboard;
+ 
+-  VersionLabel.Font.Color:= clWhite;
+ 
+   Constraints.MinWidth:= 460;
+   Constraints.MinHeight:= 380;
+Index: ide/componentlist.lfm
+===================================================================
+--- ide/componentlist.lfm	(revision 49893)
++++ ide/componentlist.lfm	(working copy)
+@@ -13,112 +13,108 @@
+   OnShow = FormShow
+   LCLVersion = '1.5'
+   object PageControl: TPageControl
+-    AnchorSideLeft.Control = Owner
+-    AnchorSideTop.Control = FilterPanel
+-    AnchorSideTop.Side = asrBottom
+-    AnchorSideRight.Control = Owner
+-    AnchorSideRight.Side = asrBottom
+-    AnchorSideBottom.Control = ButtonPanel
+     Left = 0
+-    Height = 400
+-    Top = 27
++    Height = 438
++    Top = 29
+     Width = 300
+-    ActivePage = TabSheetList
++    ActivePage = TabSheetPaletteTree
+     Anchors = [akTop, akLeft, akRight, akBottom]
+     TabIndex = 0
+     TabOrder = 1
+     OnChange = PageControlChange
+-    object TabSheetList: TTabSheet
+-      Caption = 'List'
+-      ClientHeight = 375
++    object TabSheetPaletteTree: TTabSheet
++      Caption = 'Palette'
++      ClientHeight = 407
+       ClientWidth = 296
+-      object Panel7: TPanel
++      object pnPaletteTree: TPanel
+         Left = 0
+-        Height = 375
++        Height = 407
+         Top = 0
+         Width = 296
+         Align = alClient
+         BevelOuter = bvNone
+-        BorderWidth = 2
+-        ClientHeight = 375
++        BorderWidth = 5
++        ClientHeight = 407
+         ClientWidth = 296
+         TabOrder = 0
+-        object ListTree: TTreeView
+-          Left = 2
+-          Height = 371
+-          Top = 2
+-          Width = 292
++        object PalletteTree: TTreeView
++          Left = 5
++          Height = 397
++          Top = 5
++          Width = 286
+           Align = alClient
+           DefaultItemHeight = 26
+           Images = imListPalette
+-          Indent = 25
++          PopupMenu = pmCollapseExpand
+           ReadOnly = True
++          RightClickSelect = True
+           RowSelect = True
+-          ShowButtons = False
++          ScrollBars = ssAutoVertical
+           ShowLines = False
+-          ShowRoot = False
+           TabOrder = 0
+           OnChange = ComponentsChange
+           OnDblClick = ComponentsDblClick
+           OnKeyPress = TreeKeyPress
+-          Options = [tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRowSelect, tvoToolTips]
++          Options = [tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoRowSelect, tvoShowButtons, tvoShowRoot, tvoToolTips]
+         end
+       end
+     end
+-    object TabSheetPaletteTree: TTabSheet
+-      Caption = 'Palette'
+-      ClientHeight = 375
++    object TabSheetList: TTabSheet
++      Caption = 'List'
++      ClientHeight = 407
+       ClientWidth = 296
+-      object pnPaletteTree: TPanel
++      object Panel7: TPanel
+         Left = 0
+-        Height = 375
++        Height = 407
+         Top = 0
+         Width = 296
+         Align = alClient
+         BevelOuter = bvNone
+-        BorderWidth = 5
+-        ClientHeight = 375
++        BorderWidth = 2
++        ClientHeight = 407
+         ClientWidth = 296
+         TabOrder = 0
+-        object PalletteTree: TTreeView
+-          Left = 5
+-          Height = 365
+-          Top = 5
+-          Width = 286
++        object ListTree: TTreeView
++          Left = 2
++          Height = 403
++          Top = 2
++          Width = 292
+           Align = alClient
+           DefaultItemHeight = 26
+           Images = imListPalette
+-          PopupMenu = pmCollapseExpand
++          Indent = 25
+           ReadOnly = True
+-          RightClickSelect = True
+           RowSelect = True
++          ScrollBars = ssAutoVertical
++          ShowButtons = False
+           ShowLines = False
++          ShowRoot = False
+           TabOrder = 0
+           OnChange = ComponentsChange
+           OnDblClick = ComponentsDblClick
+           OnKeyPress = TreeKeyPress
+-          Options = [tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoRowSelect, tvoShowButtons, tvoShowRoot, tvoToolTips]
++          Options = [tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRowSelect, tvoToolTips]
+         end
+       end
+     end
+     object TabSheetInheritance: TTabSheet
+       Caption = 'Inheritance'
+-      ClientHeight = 375
++      ClientHeight = 407
+       ClientWidth = 296
+       object Panel6: TPanel
+         Left = 0
+-        Height = 375
++        Height = 407
+         Top = 0
+         Width = 296
+         Align = alClient
+         BevelOuter = bvNone
+         BorderWidth = 5
+-        ClientHeight = 375
++        ClientHeight = 407
+         ClientWidth = 296
+         TabOrder = 0
+         object InheritanceTree: TTreeView
+           Left = 5
+-          Height = 365
++          Height = 397
+           Top = 5
+           Width = 286
+           Align = alClient
+@@ -129,6 +125,7 @@
+           ReadOnly = True
+           RightClickSelect = True
+           RowSelect = True
++          ScrollBars = ssAutoVertical
+           TabOrder = 0
+           OnChange = ComponentsChange
+           OnDblClick = ComponentsDblClick
+@@ -141,13 +138,13 @@
+   object FilterPanel: TPanel
+     AnchorSideRight.Side = asrBottom
+     Left = 1
+-    Height = 27
++    Height = 29
+     Top = 0
+     Width = 300
+     Anchors = [akTop, akLeft, akRight]
+     AutoSize = True
+     BevelOuter = bvNone
+-    ClientHeight = 27
++    ClientHeight = 29
+     ClientWidth = 300
+     TabOrder = 0
+     object LabelSearch: TLabel
+@@ -154,9 +151,9 @@
+       AnchorSideLeft.Control = FilterPanel
+       AnchorSideTop.Control = FilterPanel
+       Left = 6
+-      Height = 15
++      Height = 17
+       Top = 6
+-      Width = 74
++      Width = 82
+       BorderSpacing.Around = 6
+       Caption = 'LabelSearch'
+       ParentColor = False
+@@ -166,10 +163,10 @@
+       AnchorSideLeft.Side = asrBottom
+       AnchorSideTop.Control = LabelSearch
+       AnchorSideTop.Side = asrCenter
+-      Left = 86
+-      Height = 21
+-      Top = 3
+-      Width = 210
++      Left = 94
++      Height = 27
++      Top = 1
++      Width = 202
+       OnAfterFilter = TreeFilterEdAfterFilter
+       ButtonWidth = 23
+       NumGlyphs = 1
+@@ -180,24 +177,6 @@
+       FilteredTreeview = ListTree
+     end
+   end
+-  object ButtonPanel: TButtonPanel
+-    Left = 6
+-    Height = 28
+-    Top = 433
+-    Width = 288
+-    OKButton.Name = 'OKButton'
+-    OKButton.DefaultCaption = True
+-    OKButton.OnClick = OKButtonClick
+-    HelpButton.Name = 'HelpButton'
+-    HelpButton.DefaultCaption = True
+-    CloseButton.Name = 'CloseButton'
+-    CloseButton.DefaultCaption = True
+-    CancelButton.Name = 'CancelButton'
+-    CancelButton.DefaultCaption = True
+-    TabOrder = 2
+-    ShowButtons = [pbOK]
+-    ShowBevel = False
+-  end
+   object imListPalette: TImageList
+     Height = 24
+     Width = 24
+@@ -206,8 +185,8 @@
+   end
+   object pmCollapseExpand: TPopupMenu
+     OnPopup = pmCollapseExpandPopup
+-    left = 160
+-    top = 112
++    left = 192
++    top = 104
+     object miExpand: TMenuItem
+       Caption = 'Expand'
+       OnClick = miExpandClick
+Index: ide/componentlist.pas
+===================================================================
+--- ide/componentlist.pas	(revision 49893)
++++ ide/componentlist.pas	(working copy)
+@@ -32,9 +32,9 @@
+ interface
+ 
+ uses
+-  Classes, SysUtils, LCLType, Forms, Controls, Graphics, StdCtrls, ExtCtrls,
+-  ComCtrls, ButtonPanel, Menus, LazarusIDEStrConsts, ComponentReg, PackageDefs,
+-  IDEImagesIntf, TreeFilterEdit, FormEditingIntf, IDEOptionDefs;
++  Classes, SysUtils, mysql40conn, LCLType, Forms, Controls, Graphics, StdCtrls,
++  ExtCtrls, ComCtrls, ButtonPanel, Menus, LazarusIDEStrConsts, ComponentReg,
++  PackageDefs, IDEImagesIntf, TreeFilterEdit, FormEditingIntf, IDEOptionDefs;
+ 
+ type
+ 
+@@ -44,7 +44,7 @@
+     imListPalette: TImageList;
+     imInheritance: TImageList;
+     ListTree: TTreeView;
+-    ButtonPanel: TButtonPanel;
++    MenuItem1: TMenuItem;
+     miCollapse: TMenuItem;
+     miCollapseAll: TMenuItem;
+     miExpand: TMenuItem;
+@@ -120,7 +120,7 @@
+   TabSheetList.Caption := lisCmpLstList;
+   TabSheetPaletteTree.Caption := lisCmpLstPalette;
+   TabSheetInheritance.Caption := lisCmpLstInheritance;
+-  ButtonPanel.OKButton.Caption := lisUseAndClose;
++  //ButtonPanel.OKButton.Caption := lisUseAndClose;
+ 
+   imListPalette.Width  := ComponentPaletteImageWidth;
+   imListPalette.Height := ComponentPaletteImageHeight;
+@@ -131,7 +131,7 @@
+   PalletteTree.Images := imListPalette;
+   InheritanceTree.Images := imInheritance;
+   PrevPageIndex := -1;
+-  PageControl.ActivePage := TabSheetList;
++  PageControl.ActivePage := TabSheetPaletteTree;
+   if Assigned(IDEComponentPalette) then
+   begin
+     UpdateComponents;
+@@ -157,13 +157,13 @@
+   if Assigned(Parent) then
+     ParentParent := Parent.Parent;
+   //DebugLn(['*** TComponentListForm.FormShow, Parent=', Parent, ', Parent.Parent=', ParentParent]);
+-  ButtonPanel.Visible := ParentParent=Nil;
++  {ButtonPanel.Visible := ParentParent=Nil;
+   if ButtonPanel.Visible then begin
+     PageControl.AnchorSideBottom.Side := asrTop;
+     UpdateButtonState;
+   end
+   else
+-    PageControl.AnchorSideBottom.Side := asrBottom;
++    PageControl.AnchorSideBottom.Side := asrBottom;}
+ 
+   if not Assigned(Parent) then//only in undocked IDE
+   begin
+@@ -237,13 +237,13 @@
+ 
+ procedure TComponentListForm.UpdateButtonState;
+ begin
+-  ButtonPanel.OKButton.Enabled := Assigned(GetSelectedComponent);
++  //ButtonPanel.OKButton.Enabled := Assigned(GetSelectedComponent);
+ end;
+ 
+ procedure TComponentListForm.UpdateShowing;
+ begin
+-  if (ButtonPanel<>nil) and ButtonPanel.Visible then
+-    UpdateButtonState;
++  {if (ButtonPanel<>nil) and ButtonPanel.Visible then
++    UpdateButtonState;}
+   inherited UpdateShowing;
+ end;
+ 
 Index: ide/include/unix/lazbaseconf.inc
 ===================================================================
---- ide/include/unix/lazbaseconf.inc	(revision 47345)
+--- ide/include/unix/lazbaseconf.inc	(revision 49893)
 +++ ide/include/unix/lazbaseconf.inc	(working copy)
 @@ -142,12 +142,16 @@
    procedure InternalInit;
@@ -138,7 +583,7 @@ Index: ide/include/unix/lazbaseconf.inc
  
 Index: ide/include/win/lazbaseconf.inc
 ===================================================================
---- ide/include/win/lazbaseconf.inc	(revision 47345)
+--- ide/include/win/lazbaseconf.inc	(revision 49893)
 +++ ide/include/win/lazbaseconf.inc	(working copy)
 @@ -141,6 +141,8 @@
    procedure InternalInit;
@@ -162,40 +607,147 @@ Index: ide/include/win/lazbaseconf.inc
    SecondaryConfigPath:=ChompPathDelim(ProgramDirectory);
    DefaultFPCSrcDirs[1] := AppendPathDelim(ProgramDirectory) + 'fpcsrc';
    DefaultLazarusSrcDirs[1] := DefaultDrive + '\lazarus';
+Index: ide/lazarus.lpi
+===================================================================
+--- ide/lazarus.lpi	(revision 49893)
++++ ide/lazarus.lpi	(working copy)
+@@ -798,6 +798,7 @@
+       <Unit126>
+         <Filename Value="mainbase.pas"/>
+         <IsPartOfProject Value="True"/>
++        <UnitName Value="MainBase"/>
+       </Unit126>
+       <Unit127>
+         <Filename Value="buildmanager.pas"/>
+Index: ide/lazarus.pp
+===================================================================
+--- ide/lazarus.pp	(revision 49893)
++++ ide/lazarus.pp	(working copy)
+@@ -50,7 +50,7 @@
+   {$IF defined(Unix)}
+   clocale,
+   {$IFEND}
+-  SysUtils,
++  SysUtils, Classes,
+   Interfaces,
+   Forms, LCLProc,
+   IDEOptionsIntf,
+@@ -76,7 +76,31 @@
+ {$R lazarus.res}
+ {$R ../images/laz_images.res}
+ 
++function LoadRevision: string;
++var
++  Strings: TStringList;
++  S: string;
+ begin
++  S := ExtractFilePath(ParamStr(0));
++  S := IncludeTrailingPathDelimiter(S) + 'revision.txt';
++	Result := '';
++  if FileExists(S) then
++  begin
++    Strings := TStringList.Create;
++    Strings.NameValueSeparator := ':';
++    Strings.LoadFromFile(S);
++    Result := Trim(Strings.Values['Revision']);
++    LazarusScanned := Strings.Values['Scanned'] <> '';
++    Strings.Values['Scanned'] := ' true';
++    if not LazarusScanned then
++      Strings.SaveToFile(S);
++    Strings.Free;
++	end;
++  if Result = '' then
++    Result := 'Unknown';
++end;
++
++begin
+   HasGUI:=true;
+   {$IFDEF IDE_MEM_CHECK}CheckHeapWrtMemCnt('lazarus.pp: begin');{$ENDIF}
+ 
+@@ -90,7 +114,7 @@
+ 
+   // end of build flags
+   
+-  LazarusRevisionStr:=RevisionStr;
++  LazarusRevisionStr:=LoadRevision;
+   Application.Title:='Lazarus';
+   OnGetApplicationName:=@GetLazarusApplicationName;
+ 
 Index: ide/lazarus.res
 ===================================================================
 Cannot display: file marked as a binary type.
 svn:mime-type = application/octet-stream
+Index: ide/lazarusidestrconsts.pas
+===================================================================
+--- ide/lazarusidestrconsts.pas	(revision 49893)
++++ ide/lazarusidestrconsts.pas	(working copy)
+@@ -4571,7 +4571,7 @@
+   lisProjInspDeleteDependencyFor = 'Delete dependency for %s?';
+   lisProjInspRemoveFileFromProject = 'Remove file %s from project?';
+   lisProjInspRemovedRequiredPackages = 'Removed required packages';
+-  lisProjInspProjectInspector = 'Project Inspector - %s';
++  lisProjInspProjectInspector = 'Project - %s';
+   
+   // IDE Coolbar
+   lisCoolbarOptions = 'IDE CoolBar';
 Index: ide/main.pp
 ===================================================================
---- ide/main.pp	(revision 47345)
+--- ide/main.pp	(revision 49893)
 +++ ide/main.pp	(working copy)
-@@ -2031,17 +2031,19 @@
-     Result.Parent := MainIDEBar.pnlSpeedButtons;
-     Result.Images := IDEImages.Images_16;
-     Result.AutoSize := true;
-+    Result.EdgeBorders := [];
-   end;
+@@ -171,6 +171,7 @@
  
+   TMainIDE = class(TMainIDEBase)
+   private
++    procedure CheckRescan;
+     // event handlers
+     procedure MainIDEFormClose(Sender: TObject; var {%H-}CloseAction: TCloseAction);
+     procedure MainIDEFormCloseQuery(Sender: TObject; var CanClose: boolean);
+@@ -1526,6 +1527,19 @@
+   HelpBoss.LoadHelpOptions;
+ end;
+ 
++procedure TMainIDE.CheckRescan;
++var
++  Status: TIDEToolStatus;
++begin
++  if not LazarusScanned then
++  begin
++    Status := ToolStatus;
++    ToolStatus := itNone;
++    mnuEnvRescanFPCSrcDirClicked(Self);
++    ToolStatus := Status;
++  end;
++end;
++
+ procedure TMainIDE.StartIDE;
  begin
-   // Panel for buttons on the left
-   MainIDEBar.pnlSpeedButtons := TPanel.Create(OwningComponent);
--  with MainIDEBar.pnlSpeedButtons do 
-+  with MainIDEBar.pnlSpeedButtons do
-   begin
-     Name := 'pnlSpeedButtons';
-     Parent := MainIDEBar;
-     Align := alLeft;
-     Caption := '';
-+    BorderSpacing.Top := 8;
-     BevelOuter := bvNone;
-     AutoSize := true;
-     Visible := EnvironmentOptions.IDESpeedButtonsVisible;
+   {$IFDEF IDE_MEM_CHECK}CheckHeapWrtMemCnt('TMainIDE.StartIDE START');{$ENDIF}
+@@ -1557,6 +1571,7 @@
+   fUserInputSinceLastIdle:=true; // Idle work gets done initially before user action.
+   MainIDEBar.ApplicationIsActivate:=true;
+   FIDEStarted:=true;
++  CheckRescan;
+   {$IFDEF IDE_MEM_CHECK}CheckHeapWrtMemCnt('TMainIDE.StartIDE END');{$ENDIF}
+ end;
+ 
+Index: ide/mainbase.pas
+===================================================================
+--- ide/mainbase.pas	(revision 49893)
++++ ide/mainbase.pas	(working copy)
+@@ -288,6 +288,8 @@
+     set KeepInstalledPackages to true. }
+ var KeepInstalledPackages: boolean = false;
+ 
++  LazarusScanned: Boolean = False;
++
+ implementation
+ 
+ function GetMainIde: TMainIDEBase;
 Index: ide/mainintf.pas
 ===================================================================
---- ide/mainintf.pas	(revision 47345)
+--- ide/mainintf.pas	(revision 49893)
 +++ ide/mainintf.pas	(working copy)
-@@ -599,7 +599,9 @@
+@@ -600,7 +600,9 @@
  begin
    LE:=LineEnding;
    Result:=
@@ -208,9 +760,9 @@ Index: ide/mainintf.pas
      +'    { private declarations }'+LE
 Index: ide/projectdefs.pas
 ===================================================================
---- ide/projectdefs.pas	(revision 47345)
+--- ide/projectdefs.pas	(revision 49893)
 +++ ide/projectdefs.pas	(working copy)
-@@ -1280,7 +1280,7 @@
+@@ -1279,7 +1279,7 @@
    // create program source
    NewSource:='program Project1;'+LineEnding
      +LineEnding
@@ -219,7 +771,7 @@ Index: ide/projectdefs.pas
      +LineEnding
      +'uses'+LineEnding
      +'  {$IFDEF UNIX}{$IFDEF UseCThreads}'+LineEnding
-@@ -1397,7 +1397,7 @@
+@@ -1396,7 +1396,7 @@
    // create program source
    NewSource:='program Project1;'+LineEnding
      +LineEnding
@@ -228,7 +780,7 @@ Index: ide/projectdefs.pas
      +LineEnding
      +'uses'+LineEnding
      +'  {$IFDEF UNIX}{$IFDEF UseCThreads}'+LineEnding
-@@ -1462,7 +1462,7 @@
+@@ -1461,7 +1461,7 @@
      // create program source
      NewSource:='program Project1;'+LineEnding
        +LineEnding
@@ -237,7 +789,7 @@ Index: ide/projectdefs.pas
        +LineEnding
        +'uses'+LineEnding
        +'  Classes, SysUtils'+LineEnding
-@@ -1552,7 +1552,7 @@
+@@ -1553,7 +1553,7 @@
    NewSource:=TStringList.Create;
    NewSource.Add('program Project1;');
    NewSource.Add('');
@@ -246,7 +798,7 @@ Index: ide/projectdefs.pas
    NewSource.Add('');
    NewSource.Add('uses');
    NewSource.Add('  {$IFDEF UNIX}{$IFDEF UseCThreads}');
-@@ -1561,10 +1561,9 @@
+@@ -1562,10 +1562,9 @@
    NewSource.Add('  Classes, SysUtils, CustApp');
    NewSource.Add('  { you can add units after this };');
    NewSource.Add('');
@@ -258,7 +810,7 @@ Index: ide/projectdefs.pas
    NewSource.Add('  '+C+' = class(TCustomApplication)');
    NewSource.Add('  protected');
    NewSource.Add('    procedure DoRun; override;');
-@@ -1698,7 +1697,7 @@
+@@ -1699,7 +1698,7 @@
    // create program source
    NewSource:='library Project1;'+LineEnding
      +LineEnding
@@ -269,29 +821,9 @@ Index: ide/projectdefs.pas
      +'  Classes'+LineEnding
 Index: ide/projectinspector.lfm
 ===================================================================
---- ide/projectinspector.lfm	(revision 47345)
+--- ide/projectinspector.lfm	(revision 49893)
 +++ ide/projectinspector.lfm	(working copy)
-@@ -9,16 +9,15 @@
-   ClientHeight = 456
-   ClientWidth = 299
-   OnDropFiles = FormDropFiles
--  LCLVersion = '1.3'
-+  LCLVersion = '1.4.0.1'
-   object ItemsTreeView: TTreeView
-     Left = 0
--    Height = 378
--    Top = 78
-+    Height = 403
-+    Top = 53
-     Width = 299
-     Align = alClient
-     Anchors = [akTop, akLeft, akBottom]
-     BorderSpacing.Top = 2
--    DefaultItemHeight = 18
-     DragMode = dmAutomatic
-     MultiSelect = True
-     PopupMenu = ItemsPopupMenu
-@@ -36,7 +35,7 @@
+@@ -36,7 +36,7 @@
    object BtnPanel: TPanel
      Left = 0
      Height = 28
@@ -299,19 +831,8 @@ Index: ide/projectinspector.lfm
 +    Top = 23
      Width = 299
      Align = alTop
-     ClientHeight = 28
-@@ -103,8 +102,8 @@
-       AnchorSideTop.Control = SortAlphabeticallyButton
-       AnchorSideTop.Side = asrCenter
-       Left = 91
--      Height = 28
--      Top = 0
-+      Height = 27
-+      Top = 1
-       Width = 205
-       UseFormActivate = True
-       ButtonWidth = 23
-@@ -120,12 +119,14 @@
+     BevelOuter = bvNone
+@@ -123,12 +123,14 @@
    end
    object ToolBar: TToolBar
      Left = 0
@@ -329,3 +850,125 @@ Index: ide/projectinspector.lfm
      TabOrder = 2
    end
    object ItemsPopupMenu: TPopupMenu
+Index: ide/searchresultview.lfm
+===================================================================
+--- ide/searchresultview.lfm	(revision 49893)
++++ ide/searchresultview.lfm	(working copy)
+@@ -1,7 +1,7 @@
+ object SearchResultsView: TSearchResultsView
+-  Left = 344
++  Left = 325
+   Height = 273
+-  Top = 327
++  Top = 346
+   Width = 799
+   BorderIcons = [biSystemMenu]
+   Caption = 'SearchResultsView'
+@@ -16,10 +16,11 @@
+     AnchorSideTop.Control = ToolBar
+     AnchorSideTop.Side = asrBottom
+     Left = 0
+-    Height = 249
+-    Top = 24
++    Height = 245
++    Top = 28
+     Width = 799
+     Anchors = [akTop, akLeft, akRight, akBottom]
++    BorderSpacing.Top = 4
+     MultiLine = True
+     TabOrder = 1
+     OnChange = ResultsNoteBookPageChanged
+@@ -29,9 +30,9 @@
+   end
+   object ToolBar: TToolBar
+     Left = 0
+-    Height = 24
+-    Top = 0
+-    Width = 57
++    Height = 22
++    Top = 2
++    Width = 47
+     Align = alNone
+     AutoSize = True
+     EdgeBorders = []
+@@ -39,7 +40,7 @@
+     TabOrder = 2
+     object SearchAgainButton: TToolButton
+       Left = 1
+-      Top = 2
++      Top = 0
+       Caption = 'SearchAgainButton'
+       ImageIndex = 0
+       OnClick = SearchAgainButtonClick
+@@ -46,19 +47,11 @@
+     end
+     object ClosePageButton: TToolButton
+       Left = 24
+-      Top = 2
++      Top = 0
+       Caption = 'ClosePageButton'
+       ImageIndex = 1
+       OnClick = ClosePageButtonClick
+     end
+-    object ToolButton3: TToolButton
+-      Left = 47
+-      Height = 22
+-      Top = 2
+-      Width = 10
+-      Caption = 'ToolButton3'
+-      Style = tbsSeparator
+-    end
+   end
+   object SearchInListEdit: TTreeFilterEdit
+     AnchorSideLeft.Control = ToolBar
+@@ -65,9 +58,9 @@
+     AnchorSideLeft.Side = asrBottom
+     AnchorSideTop.Control = ToolBar
+     AnchorSideTop.Side = asrCenter
+-    Left = 63
+-    Height = 23
+-    Top = 1
++    Left = 53
++    Height = 27
++    Top = 0
+     Width = 296
+     UseFormActivate = True
+     ButtonWidth = 23
+Index: ide/searchresultview.pp
+===================================================================
+--- ide/searchresultview.pp	(revision 49893)
++++ ide/searchresultview.pp	(working copy)
+@@ -140,7 +140,6 @@
+     ResultsNoteBook: TPageControl;
+     ToolBar: TToolBar;
+     SearchAgainButton: TToolButton;
+-    ToolButton3: TToolButton;
+     ClosePageButton: TToolButton;
+     SearchInListEdit: TTreeFilterEdit;
+     procedure actNextPageExecute(Sender: TObject);
+Index: ide/splash.lfm
+===================================================================
+--- ide/splash.lfm	(revision 49893)
++++ ide/splash.lfm	(working copy)
+@@ -12,7 +12,7 @@
+   ClientWidth = 429
+   FormStyle = fsSplash
+   Position = poScreenCenter
+-  LCLVersion = '0.9.29'
++  LCLVersion = '1.5'
+   object Image: TImage
+     Left = 0
+     Height = 341
+Index: ide/splash.pp
+===================================================================
+--- ide/splash.pp	(revision 49893)
++++ ide/splash.pp	(working copy)
+@@ -81,7 +81,7 @@
+       EndEllipsis: False;
+     );
+   VersionFontStyle: TFontStyles = [fsBold];
+-  VersionFontColor: TColor = clBlue;
++  VersionFontColor: TColor = clBlack;
+ 
+ constructor TSplashForm.Create(AOwner: TComponent);
+ begin

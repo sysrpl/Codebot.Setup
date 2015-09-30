@@ -56,8 +56,8 @@ require "7za" "p7zip-full"
 # If you are having issues linking to x11, gdk-pixbuf, cairo, pango and 
 # other libs, you may need something like this in your requirements
 
-# sudo apt-get install libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev
-# libatk1.0-dev libghc-x11-dev libgtk2.0-dev
+sudo apt-get install libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev \
+libatk1.0-dev libghc-x11-dev libgtk2.0-dev
 
 # TODO Provide missing program install command help based on current distro
 

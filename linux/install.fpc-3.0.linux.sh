@@ -236,10 +236,12 @@ replace() {
 	find "$1" -name "$2" -exec sed -i "s/$BEFORE/$AFTER/g" {} \;
 }
 
-# Original location
-ORIGIN="/home/delluser/Development/FreePascal"
-
 # Replace paths from their original location to the new one
+ORIGIN="/home/delluser/Development/Base"
+replace "$BASE/lazarus/config" "*.xml" "$ORIGIN" "$BASE"
+replace "$BASE/lazarus" "lazarus.sh" "$ORIGIN" "$BASE"
+replace "$BASE/lazarus" "lazarus.desktop" "$ORIGIN" "$BASE"
+ORIGIN="/home/delluser/Development/FreePascal"
 replace "$BASE/lazarus/config" "*.xml" "$ORIGIN" "$BASE"
 replace "$BASE/lazarus" "lazarus.sh" "$ORIGIN" "$BASE"
 replace "$BASE/lazarus" "lazarus.desktop" "$ORIGIN" "$BASE"
@@ -288,3 +290,4 @@ echo
 
 # Start up our new lazarus
 ./lazarus
+

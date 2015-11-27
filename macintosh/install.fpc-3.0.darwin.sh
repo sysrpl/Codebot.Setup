@@ -1,9 +1,8 @@
 #!/bin/sh
-# Author of this script: http://www.getlazarus.org
-# This is the universal Macintosh script to install Free Pascal and Lazarus
+# This is the universal OSX script to install Free Pascal and Lazarus
 
 # If you need to fix something and or want to contribute, send your 
-# changes to admin at getlazarus dot org with "macintosh free pascal install"
+# changes to sysrpl at codebot dot org with "osx free pascal install"
 # in the subject line.
 
 # Change the line below to define your own install folder
@@ -21,18 +20,7 @@ if [ "$(id -u)" = "0" ]; then
    exit 1
 fi
 
-# Block comment for testing
-: <<'COMMENT'
-COMMENT
-
-# Define our Free Pascal and Lazarus versions numbers
-FPC=3.0
-LAZ=1.4
-
-# The full version number of the stable compiler and the one we are building
-FPC_STABLE=2.6.4
-FPC_BUILD=3.0.1
-
+FPC="3.0"
 OS_TARGET="darwin"
 OS_VERSION=$(sw_vers -productVersion | awk -F "." '{print $2}')
 
@@ -52,6 +40,8 @@ elif [ "$OS_VERSION" -eq 9 ]; then
 	echo "Detected OSX Mavericks"
 elif [ "$OS_VERSION" -eq 10 ]; then
 	echo "Detected OSX Yosemite"
+elif [ "$OS_VERSION" -eq 11 ]; then
+	echo "Detected OSX El Capitain"
 else
 	echo "This installer requires OSX 10.7 (Lion) or above"
 	echo "done."
@@ -85,13 +75,15 @@ if ! port version &> /dev/null ; then
 	MACPORTS=/tmp/macports.pkg
 	if [ ! -f "$MACPORTS" ]; then
 	  if [ "$OS_VERSION" -eq 7 ]; then
-		  PKGURL=https://distfiles.macports.org/MacPorts/MacPorts-2.2.1-10.7-Lion.pkg
+		  PKGURL=https://distfiles.macports.org/MacPorts/MacPorts-2.3.4-10.7-Lion.pkg
 	  elif [ "$OS_VERSION" -eq 8 ]; then
-		  PKGURL=https://distfiles.macports.org/MacPorts/MacPorts-2.3.3-10.8-MountainLion.pkg
+		  PKGURL=https://distfiles.macports.org/MacPorts/MacPorts-2.3.4-10.8-MountainLion.pkg
 	  elif [ "$OS_VERSION" -eq 9 ]; then
-		  PKGURL=https://distfiles.macports.org/MacPorts/MacPorts-2.3.3-10.9-Mavericks.pkg
+		  PKGURL=https://distfiles.macports.org/MacPorts/MacPorts-2.3.4-10.9-Mavericks.pkg
 	  elif [ "$OS_VERSION" -eq 10 ]; then
-		  PKGURL=https://distfiles.macports.org/MacPorts/MacPorts-2.3.3-10.10-Yosemite.pkg
+		  PKGURL=https://distfiles.macports.org/MacPorts/MacPorts-2.3.4-10.10-Yosemite.pkg
+	  elif [ "$OS_VERSION" -eq 11 ]; then
+		  PKGURL=https://distfiles.macports.org/MacPorts/MacPorts-2.3.4-10.11-ElCapitan.pkg
 	  fi
 	  curl "$PKGURL" -o "$MACPORTS"
 	fi
@@ -110,12 +102,12 @@ else
 	echo "Found macports"	
 fi
 
-if ! gdb-apple --version &> /dev/null ; then
+if ! ggdb --version &> /dev/null ; then
 	echo "Setup has detected that the gnu debugger is not installed"
 	read -p "Press [ENTER] to install the gnu debugger"
-	sudo port install gdb-apple
+	sudo port install gdb
 	echo
-	if ! gdb-apple --version &> /dev/null ; then
+	if ! ggdb --version &> /dev/null ; then
 		echo "Setup has detected that the gnu debugger did not install"
 		echo "done."
 		echo
@@ -138,7 +130,7 @@ else
 	echo "Found 7-zip"	
 fi
 
-SIGNED="$(codesign -dv /opt/local/bin/gdb-apple 2>&1)"
+SIGNED="$(codesign -dv /opt/local/bin/ggdb 2>&1)"
 
 if [[ $SIGNED == *"object is not signed"* ]]
 then
@@ -151,10 +143,12 @@ then
 	read -p "Press [ENTER] to continue"
 fi
 
+# TODO Provide missing program install command help based on current distro
+
 # Present a description of this script
 clear
-echo "This is the universal Mac script to install Free Pascal and Lazarus test"
-echo "------------------------------------------------------------------------"
+echo "This is the universal OSX script to install Free Pascal and Lazarus"
+echo "-------------------------------------------------------------------"
 echo
 echo "It will install copies of:"
 echo "  Free Pascal $FPC"
@@ -184,11 +178,6 @@ case $REPLY in
 		;;
 esac
 
-# Ask for permission to create an application shortcut
-echo "After install do you want to copy 'Lazarus 1.4 Test.app' to:"
-read -r -p "/Applications (y/n)? " SHORTCUT
-echo 
-
 # Exit the script if $BASE folder already exist
 if [ -d "$BASE" ]; then
 	echo "Folder \"$BASE\" already exists"
@@ -211,6 +200,9 @@ curl "http://cache.getlazarus.org/archives/$ARCHIVE" -o "$ARCHIVE"
 7za x "$ARCHIVE"
 rm "$ARCHIVE"
 
+# fi
+# End block comment
+
 # function Replace(folder, search, replace, filespec)
 replace() {
 	cd "$BASE/$1"
@@ -226,49 +218,29 @@ replace() {
 	perl -pi -w -e "s/${SEARCH}/${REPLACE}/g;" $1 &> /dev/null
 }
 
-ORIGIN="/Users/macuser/Development/Base"
+ORIGIN="/Users/macuser/Development/FreePascal"
 replace "lazarus/config" "$ORIGIN" "$BASE" "*.*"
-replace "fpc/bin/i386-darwin" "$ORIGIN" "$BASE" "*.cfg" 
-replace "Lazarus 1.4 Test.app/Contents/MacOS" "$ORIGIN" "$BASE" "lazarus"
+replace "fpc/bin" "$ORIGIN" "$BASE" "*.cfg" 
+replace "lazarus/lazarus.app/Contents/MacOS" "$ORIGIN" "$BASE" "lazarus"
 echo 
 
-# Fix symbolic links
-cd "$BASE/lazarus/lazarus.app/Contents/MacOS"
-rm lazarus
-ln -s ../../../lazarus lazarus
-cd ../Resources/startlazarus.app/Contents/MacOS
-rm startlazarus
-ln -s ../../../../../../startlazarus startlazarus
-cd "$BASE/lazarus/startlazarus.app/Contents/MacOS"
-rm startlazarus
-ln -s ../../../startlazarus startlazarus
 cd $BASE
+ditto ./lazarus/lazarus.app ./Lazarus.app
 
-case $SHORTCUT in
-    [yY][eE][sS]|[yY]) 
-		cp -r "$BASE/Lazarus 1.4 Test.app" "/Applications/Lazarus 1.4 Test.app" &> /dev/null
-		echo
-		;;
-    *)
-		echo 
-		;;
-esac
-
-open "http://www.getlazarus.org/installed/?platform=macintosh"
-echo "Free Pascal and Lazarus install complete"
+echo "Free Pascal 3.0 with Lazarus install complete"
 
 if [[ $SIGNED == *"object is not signed"* ]]
 then
 	echo
 	echo "The gnu debugger is not currently code signed" 
 	echo
-	echo "Read http://www.getlazarus.org/setup/macintosh for instructions on"
+	echo "Read http://lazarus.codebot.org/darwin/debugger for instructions on"
 	echo "how to code sign the debugger"
 	echo
-	open "http://www.getlazarus.org/setup/macintosh"
+	open "http://lazarus.codebot.org/darwin/debugger"
 	echo
 fi
 
 cd "$BASE"
+touch "You can now run 'Lazarus.app' or drag it to 'Applications'"
 open "$BASE"
-open "$BASE/Lazarus 1.4 Test.app"

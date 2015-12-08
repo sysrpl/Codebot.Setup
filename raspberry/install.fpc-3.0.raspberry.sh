@@ -22,11 +22,34 @@ function expandPath() {
 	fi
 }
 
-echo "If Lazarus does not operate correctly, you might be required"
-echo "to install these gtk+ dev packages using the sudo command:"
+echo "Lazarus requires these gtk+ dev packages to operate"
+echo "you can install them using this command:"
 echo
 echo "sudo apt-get install libgtk2.0-dev libcairo2-dev libpango1.0-dev \\"
 echo "  libgdk-pixbuf2.0-dev libatk1.0-dev libghc-x11-dev"
+echo
+
+# function requirePackage(package) 
+function requirePackage() {
+	if [ $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+		echo "  $1 not found"
+		echo 
+		echo "An error occured"
+		echo 
+		echo "Lazarus requires the package $1 which was not found on your system"
+		echo "Install this package and re-run setup"
+		echo 
+		exit 1
+	fi	
+	echo "  $1 found"
+}
+
+requirePackage "libgtk2.0-dev"
+requirePackage "libcairo2-dev"
+requirePackage "libpango1.0-dev"
+requirePackage "libgdk-pixbuf2.0-dev"
+requirePackage "libatk1.0-dev"
+requirePackage "libghc-x11-dev"
 echo
 echo "Press return to continue"
 read CHOICE
@@ -176,6 +199,29 @@ case $SHORTCUT in
 	*)
 		;;
 esac
+
+mv "$BASE/lazarus/lazarus.desktop" "$BASE/lazarus.desktop"
+
+FPCDIR="$BASE/fpc"
+# Create a terminal configuration
+TERMINAL="$FPCDIR/bin/fpc-terminal.sh"
+echo "#!/bin/bash" > $TERMINAL
+echo "export PPC_CONFIG_PATH=$FPCDIR/bin" >> $TERMINAL
+echo "export PATH=\$PPC_CONFIG_PATH:\$PATH" >> $TERMINAL
+echo "\$SHELL" >> $TERMINAL
+chmod +x $TERMINAL
+# Get the current terminal program name
+APP=`ps -p $(ps -p $(ps -p $$ -o ppid=) -o ppid=) o args=`
+# Create a shortcut file
+DESKTOP="$BASE/freepascal.desktop"
+echo "[Desktop Entry]" > $DESKTOP
+echo "Name=Free Pascal Terminal" >> $DESKTOP
+echo "Comment=Open a new terminal with the fpc program made available" >> $DESKTOP
+echo "Icon=terminal" >> $DESKTOP
+echo "Exec=$APP -e \"$TERMINAL\"" >> $DESKTOP
+echo "Terminal=false" >> $DESKTOP
+echo "Type=Application" >> $DESKTOP
+chmod +x $DESKTOP
 
 function hit() {
 	if type "curl" > /dev/null; then

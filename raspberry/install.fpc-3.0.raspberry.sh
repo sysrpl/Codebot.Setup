@@ -22,8 +22,8 @@ function expandPath() {
 	fi
 }
 
-echo "Lazarus requires these gtk+ dev packages to operate"
-echo "you can install them using this command:"
+echo "Lazarus requires these gtk+ dev packages to operate which"
+echo "can be installed using this command:"
 echo
 echo "sudo apt-get install libgtk2.0-dev libcairo2-dev libpango1.0-dev \\"
 echo "  libgdk-pixbuf2.0-dev libatk1.0-dev libghc-x11-dev"

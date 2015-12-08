@@ -63,7 +63,6 @@ if ! xcode-select -p &> /dev/null ; then
 		echo "Please wait for xcode tools to install and re-run this script"
 		echo "done."
 		echo
-		exit 1
 	fi
 else
 	echo "Found xcode tools"	
@@ -98,7 +97,6 @@ if ! port version &> /dev/null ; then
 		echo "Please wait for macports to install and re-run this script"
 		echo "done."
 		echo
-		exit 1
 	fi
 else
 	echo "Found macports"	
@@ -113,7 +111,6 @@ if ! ggdb --version &> /dev/null ; then
 		echo "Setup has detected that the gnu debugger did not install"
 		echo "done."
 		echo
-		exit 1
 	fi
 else
 	echo "Found gnu debugger"	
@@ -128,7 +125,6 @@ if ! 7za --help &> /dev/null ; then
 		echo "Setup has detected that 7-zip did not install"
 		echo "done."
 		echo
-		exit 1
 	fi
 else
 	echo "Found 7-zip"	

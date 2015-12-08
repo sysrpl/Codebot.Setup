@@ -232,5 +232,6 @@ function hit() {
 }
 
 hit "http://www.getlazarus.org/installed/?platform=raspberry"
-echo "Your Free Pascal 3.0 with Lazarus now installed"
+echo 
+echo "Your Free Pascal 3.0 with Lazarus is now installed"
 echo 

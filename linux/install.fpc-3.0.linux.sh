@@ -255,7 +255,6 @@ URL=http://cache.getlazarus.org/archives
 # Download a temporary version of fpc stable
 wget -P $BASE $URL/fpc-$FPC_STABLE.$CPU-linux.7z
 7za x $BASE/fpc-$FPC_STABLE.$CPU-linux.7z -o$BASE
-read CHOICE
 rm $BASE/fpc-$FPC_STABLE.$CPU-linux.7z
 
 # Add fpc stable to our path

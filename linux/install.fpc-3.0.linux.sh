@@ -34,8 +34,7 @@ echo "--------------------------------------------------"
 echo "This installer requires the following packages which"
 echo "can be installed on Debian distributions by using:"
 echo
-echo "sudo apt-get install build-essential patch wget \\"
-echo "  p7zip-full"
+echo "sudo apt-get install build-essential p7zip-full"
 echo
 echo "Lazarus requires the following Gtk+ dev packages which"
 echo "can be installed on Debian distributions by using:"
@@ -72,13 +71,12 @@ function require() {
 
 # Require the following programs 
 require "make" "build-essential"
-require "patch" "patch"
-require "wget" "wget"
 require "7za" "p7zip-full"
 
 # function requirePackage(package) 
 function requirePackage() {
-	if [ ! $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+	INSTALLED=$(dpkg-query -W --showformat='${Status}\n' $1 2> /dev/null | grep "install ok installed")
+	if [ "$INSTALLED" = "" ]; then
 		echo "$1 not found"
 		echo 
 		echo "An error occured"
@@ -107,7 +105,16 @@ if type "dpkg-query" > /dev/null; then
 fi
 sleep 2s
 
-# Cross platform expandPath function
+# function download(url, output)
+function download() {
+	if type "curl" > /dev/null; then
+		curl -o "$1" "$2"
+	elif type "wget" > /dev/null; then
+		wget -O "$1" "$2"
+	fi	
+}
+
+# Cross platform function expandPath(path)
 function expandPath() {
 	if [ `uname`="Darwin" ]; then
 		[[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}";
@@ -261,9 +268,9 @@ fi
 URL=http://cache.getlazarus.org/archives
 
 # Download a temporary version of fpc stable
-wget -P $BASE $URL/fpc-$FPC_STABLE.$CPU-linux.7z
-7za x $BASE/fpc-$FPC_STABLE.$CPU-linux.7z -o$BASE
-rm $BASE/fpc-$FPC_STABLE.$CPU-linux.7z
+download "$BASE/fpc-$FPC_STABLE.$CPU-linux.7z" $URL/fpc-$FPC_STABLE.$CPU-linux.7z
+7za x "$BASE/fpc-$FPC_STABLE.$CPU-linux.7z" -o$BASE
+rm "$BASE/fpc-$FPC_STABLE.$CPU-linux.7z"
 
 # Add fpc stable to our path
 OLDPATH=$PATH
@@ -274,9 +281,9 @@ export PATH=$PPC_CONFIG_PATH:$OLDPATH
 $PPC_CONFIG_PATH/fpcmkcfg -d basepath=$BASE/fpc-$FPC_STABLE/lib/fpc/\$FPCVERSION -o $PPC_CONFIG_PATH/fpc.cfg
 
 # Download the new compiler source code
-wget -P $BASE $URL/fpc.7z
-7za x $BASE/fpc.7z -o$BASE
-rm $BASE/fpc.7z
+download "$BASE/fpc.7z" $URL/fpc.7z
+7za x "$BASE/fpc.7z" "-o$BASE"
+rm "$BASE/fpc.7z"
 
 # Make the new compiler
 cd $BASE/fpc
@@ -304,18 +311,18 @@ export PATH=$PPC_CONFIG_PATH:$OLDPATH
 rm $PPC_CONFIG_PATH/fpc.cfg
 $PPC_CONFIG_PATH/fpcmkcfg -d basepath=$BASE/fpc/lib/fpc/\$FPCVERSION -o $PPC_CONFIG_PATH/fpc.cfg
 
-find $BASE/fpc/packages -name "units" | xargs rm -rf
-find $BASE/fpc/packages -name "test*" | xargs rm -rf
-find $BASE/fpc/packages -name "example*" | xargs rm -rf
-find $BASE/fpc/compiler -name "units" | xargs rm -rf
-find $BASE/fpc/installer -name "units" | xargs rm -rf
-find $BASE/fpc/rtl -name "units" | xargs rm -rf
+find "$BASE/fpc/packages" -name "units" | xargs rm -rf
+find "$BASE/fpc/packages" -name "test*" | xargs rm -rf
+find "$BASE/fpc/packages" -name "example*" | xargs rm -rf
+find "$BASE/fpc/compiler" -name "units" | xargs rm -rf
+find "$BASE/fpc/installer" -name "units" | xargs rm -rf
+find "$BASE/fpc/rtl" -name "units" | xargs rm -rf
 
 # Download the lazarus source code
-wget -P $BASE $URL/lazarus.7z
-7za x $BASE/lazarus.7z -o$BASE
-rm $BASE/lazarus.7z
-cd $BASE/lazarus
+download "$BASE/lazarus.7z" $URL/lazarus.7z
+7za x "$BASE/lazarus.7z" "-o$BASE"
+rm "$BASE/lazarus.7z"
+cd "$BASE/lazarus"
 
 # function replace(folder, files, before, after) 
 function replace() {

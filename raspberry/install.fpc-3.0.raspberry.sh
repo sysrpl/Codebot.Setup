@@ -13,7 +13,22 @@ if [ "$(id -u)" = "0" ]; then
    exit 1
 fi
 
-# Cross platform expandPath function
+# Prevent this script from running as root 
+if [ "$(id -u)" = "0" ]; then
+   echo "This script should not be run as root"
+   exit 1
+fi
+
+# function download(url, output)
+function download() {
+	if type "curl" > /dev/null; then
+		curl -o "$1" "$2"
+	elif type "wget" > /dev/null; then
+		wget -O "$1" "$2"
+	fi	
+}
+
+# Cross platform function expandPath(path)
 function expandPath() {
 	if [ `uname`="Darwin" ]; then
 		[[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}";
@@ -22,26 +37,39 @@ function expandPath() {
 	fi
 }
 
-echo "Lazarus requires these gtk+ dev packages to operate which"
-echo "can be installed using this command:"
+clear
+echo "Prerequisites for Free Pascal and Lazarus on Raspbian"
+echo "-----------------------------------------------------"
+echo "Lazarus requires the following Gtk+ dev packages which"
+echo "can be installed on Raspbian by using:"
 echo
-echo "sudo apt-get install libgtk2.0-dev libcairo2-dev libpango1.0-dev \\"
-echo "  libgdk-pixbuf2.0-dev libatk1.0-dev libghc-x11-dev"
+echo "sudo apt-get install libgtk2.0-dev libcairo2-dev \\" 
+echo "  libpango1.0-dev libgdk-pixbuf2.0-dev libatk1.0-dev \\"
+echo "  libghc-x11-dev"
+echo
+echo -n "Press return to check your system"
+read CHOICE
 echo
 
 # function requirePackage(package) 
 function requirePackage() {
-	if [ $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-		echo "  $1 not found"
+	INSTALLED=$(dpkg-query -W --showformat='${Status}\n' $1 2> /dev/null | grep "install ok installed")
+	if [ "$INSTALLED" = "" ]; then
+		echo "$1 not found"
 		echo 
 		echo "An error occured"
 		echo 
-		echo "Lazarus requires the package $1 which was not found on your system"
-		echo "Install this package and re-run setup"
+		echo "This script requires the package $1"
+		echo 
+		echo "Use the command:"
+		echo 
+		echo "sudo apt-get install $1"
+		echo 
+		echo "Then re-run this script"
 		echo 
 		exit 1
 	fi	
-	echo "  $1 found"
+	echo "$1 found"
 }
 
 requirePackage "libgtk2.0-dev"
@@ -50,9 +78,7 @@ requirePackage "libpango1.0-dev"
 requirePackage "libgdk-pixbuf2.0-dev"
 requirePackage "libatk1.0-dev"
 requirePackage "libghc-x11-dev"
-echo
-echo "Press return to continue"
-read CHOICE
+sleep 2s
 
 # Present a description of this script
 clear
@@ -139,8 +165,8 @@ while true; do
 done
 
 # Confirm their choice
-echo -n "Create a local application shortcut after install? (y,n): "
-read SHORTCUT
+echo "After install do you want to shortcuts created in:"
+read -r -p "$HOME/.local/share/applications (y/n)? " SHORTCUT
 echo 
 
 # Create the folder
@@ -168,9 +194,9 @@ cd $BASE
 # Download from our Amazon S3 bucket 
 URL=http://cache.getlazarus.org/archives
 
-wget -P "$BASE" $URL/fpc.lazarus.raspberry.tar.gz
+download fpc.lazarus.raspberry.tar.gz $URL/fpc.lazarus.raspberry.tar.gz
 tar xvf fpc.lazarus.raspberry.tar.gz
-rm "$BASE/fpc.lazarus.raspberry.tar.gz"
+rm fpc.lazarus.raspberry.tar.gz
 
 # Create the cfg file
 rm "$BASE/fpc/bin/fpc.cfg"

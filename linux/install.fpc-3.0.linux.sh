@@ -238,8 +238,7 @@ cd $BASE
 # Determine operating system architecture
 CPU=$(uname -m)
 
-if [ "$CPU" = "i686" ]
-then
+if [ "$CPU" = "i686" ]; then
 	CPU="i386"
 fi
   
@@ -277,8 +276,7 @@ cd $BASE/fpc
 make all
 make install INSTALL_PREFIX=$BASE/fpc
 # Make cross compilers
-if [ "$CPU" = "i686" ]
-then
+if [ "$CPU" = "i386" ]; then
 	make crossinstall OS_TARGET=linux CPU_TARGET=x86_64 INSTALL_PREFIX=$BASE/fpc
 else
 	make crossinstall OS_TARGET=linux CPU_TARGET=i386 INSTALL_PREFIX=$BASE/fpc	

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This is the universal OSX script to install Free Pascal and Lazarus
 
 # If you need to fix something and or want to contribute, send your 
@@ -21,6 +21,7 @@ if [ "$(id -u)" = "0" ]; then
 fi
 
 FPC="3.0"
+LAZ="1.5"
 OS_TARGET="darwin"
 OS_VERSION=$(sw_vers -productVersion | awk -F "." '{print $2}')
 
@@ -143,7 +144,14 @@ then
 	read -p "Press [ENTER] to continue"
 fi
 
-# TODO Provide missing program install command help based on current distro
+# Cross platform expandPath function
+function expandPath() {
+	if [ `uname`="Darwin" ]; then
+		[[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}";
+	else
+		echo $(readlink -m `$1`)
+	fi
+}
 
 # Present a description of this script
 clear
@@ -154,45 +162,93 @@ echo "It will install copies of:"
 echo "  Free Pascal $FPC"
 echo "  Lazarus $LAZ"
 echo
-echo "To this folder:"
-echo "  $BASE"
-echo
-echo "To uninstall, simply type:"
-echo "  rm -rf $BASE"
-echo
-echo "This script not interfere with your existing development environment"
+echo "This script not interfere with your existing Lazarus environment"
 echo
 
-# Ask for permission to proceed
-read -r -p "Continue (y/n)? " REPLY
+BASE=$HOME/Development/FreePascal
 
-case $REPLY in
-    [yY][eE][sS]|[yY]) 
+# Ask a series of questions
+while true; do
+	# Ask for an install location
+	echo "Enter an installation folder or press return to"
+	echo "accept the default install location"
+	echo 
+	echo -n "[$BASE]: "
+		read CHOICE
+	echo
+
+	# Use BASE as the default
+	if [ -z "$CHOICE" ]; then
+		CHOICE=$BASE
+	fi
+
+	# Allow for relative paths
+	CHOICE=`eval echo $CHOICE`
+	EXPAND=`expandPath "$CHOICE"`
+
+	# Allow install only under your home folder
+	if [[ $EXPAND == $HOME* ]]; then
+		echo "The install folder will be:"
+		echo "$EXPAND"
 		echo
-		;;
-    *)
-		# Exit the script if the user does not type "y" or "Y"
-		echo "done."
-		echo 
-		exit 1
-		;;
-esac
+	else
+		echo "The install folder must be under your personal home folder"
+		echo
+		continue
+	fi
 
-# Exit the script if $BASE folder already exist
-if [ -d "$BASE" ]; then
-	echo "Folder \"$BASE\" already exists"
+	# Confirm their choice
+	echo -n "Continue? (y,n): "
+	read CHOICE
 	echo 
-	echo "Delete this folder or change the variable BASE in this script"
-	echo "Then re-run this script"
-	echo 
-	echo "done."
-	echo 
-	exit 1
+
+	case $CHOICE in
+		[yY][eE][sS]|[yY]) 
+			;;
+		*)
+			echo "done."
+			echo
+			exit 1
+			;;
+	esac
+
+	# If folder already exists ask to remove it
+	if [ -d "$EXPAND" ]; then
+		echo "Directory already exist"
+		echo -n "Remove the entire folder and overwrite? (y,n): "
+		read CHOICE
+		case $CHOICE in
+			[yY][eE][sS]|[yY]) 
+				echo
+				rm -rf $EXPAND
+				;;
+			*)
+				echo
+				echo "done."
+				echo
+				exit 1
+				;;
+		esac
+	fi
+
+	break
+done
+
+# Create the folder
+BASE=$EXPAND
+mkdir -p "$BASE"
+
+# Exit if the folder could not be created
+if [ ! -d "$BASE" ]; then
+  echo "Could not create directory"
+  echo
+  echo "done."
+  echo
+  exit 1;
 fi
 
-# Create our install folder
-mkdir -p "$BASE"
-cd "$BASE"
+CURRENT=`pwd`
+cd $BASE
 
 # Download and extract the archive
 ARCHIVE="fpc-$FPC.$OS_TARGET.7z"
@@ -204,10 +260,9 @@ rm "$ARCHIVE"
 # End block comment
 
 # function Replace(folder, search, replace, filespec)
-replace() {
+function replace() {
 	cd "$BASE/$1"
 	shift
-	PWD
 	SEARCH=$(echo "$1" | sed 's/[\*\.]/\\&/g')
 	SEARCH=$(echo "$SEARCH" | sed 's/\//\\\//g')
 	shift
@@ -220,12 +275,30 @@ replace() {
 
 ORIGIN="/Users/macuser/Development/FreePascal"
 replace "lazarus/config" "$ORIGIN" "$BASE" "*.*"
-replace "fpc/bin" "$ORIGIN" "$BASE" "*.cfg" 
 replace "lazarus/lazarus.app/Contents/MacOS" "$ORIGIN" "$BASE" "lazarus"
+replace "fpc/bin" "$ORIGIN" "$BASE" "*.cfg" 
 echo 
 
 cd $BASE
-ditto ./lazarus/lazarus.app ./Lazarus.app
+ditto ./lazarus/lazarus.app ./Lazarus.app/
+cd $BASE
+
+TERMINAL="Free Pascal Terminal.command"
+echo "osascript -e 'tell app \"Terminal\"" > "$TERMINAL"
+echo "    do script \"export PPC_CONFIG_PATH=\\\"$BASE/fpc/bin\\\" && export PATH=\\\"\$PPC_CONFIG_PATH:\$PATH\\\"\"" >> "$TERMINAL"
+echo "end tell'" >> "$TERMINAL"
+chmod +x "$TERMINAL"
+
+# Count this as an install
+function hit() {
+	if type "curl" > /dev/null; then
+		curl -s -o /dev/null "$1"
+	elif type "wget" > /dev/null; then
+		wget -q -O /dev/null "$1"
+	fi	
+}
+
+hit "http://www.getlazarus.org/installed/?platform=macintosh"
 
 echo "Free Pascal 3.0 with Lazarus install complete"
 
@@ -241,6 +314,5 @@ then
 	echo
 fi
 
-cd "$BASE"
-touch "You can now run 'Lazarus.app' or drag it to 'Applications'"
 open "$BASE"
+cd $CURRENT

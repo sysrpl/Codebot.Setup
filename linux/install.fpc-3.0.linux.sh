@@ -28,16 +28,24 @@ if [ "$(id -u)" = "0" ]; then
    exit 1
 fi
 
+clear
+echo "Prerequisites for Free Pascal and Lazarus on Linux"
+echo "--------------------------------------------------"
 echo "This installer requires the following packages which"
 echo "can be installed on Debian distributions by using:"
 echo
-echo "sudo apt-get install build-essential patch wget p7zip-full"
+echo "sudo apt-get install build-essential patch wget \\"
+echo "  p7zip-full"
 echo
-echo "Lazarus requires these Gtk+ dev packages to operate which"
+echo "Lazarus requires the following Gtk+ dev packages which"
 echo "can be installed on Debian distributions by using:"
 echo
-echo "sudo apt-get install libgtk2.0-dev libcairo2-dev libpango1.0-dev \\"
-echo "  libgdk-pixbuf2.0-dev libatk1.0-dev libghc-x11-dev"
+echo "sudo apt-get install libgtk2.0-dev libcairo2-dev \\" 
+echo "  libpango1.0-dev libgdk-pixbuf2.0-dev libatk1.0-dev \\"
+echo "  libghc-x11-dev"
+echo
+echo -n "Press return to check your system"
+read CHOICE
 echo
 
 # function require(program) 
@@ -51,7 +59,7 @@ function require() {
 		echo 
 		echo "On Debian based distributions type the following to install it"
 		echo 
-		echo "sudo apt-get install $1"
+		echo "sudo apt-get install $2"
 		echo 
 		echo "Then re-run this script"
 		echo 
@@ -97,10 +105,7 @@ if type "dpkg-query" > /dev/null; then
 	requirePackage "libatk1.0-dev"
 	requirePackage "libghc-x11-dev"
 fi
-
-echo
-echo -n "Press return to continue"
-read CHOICE
+sleep 2s
 
 # Cross platform expandPath function
 function expandPath() {
@@ -113,13 +118,16 @@ function expandPath() {
 
 # Present a description of this script
 clear
-echo "This is the universal Linux script to install Free Pascal and Lazarus"
-echo "---------------------------------------------------------------------"
-echo
-echo "It will download the sources for:"
+echo "Universal Linux script to install Free Pascal and Lazarus"
+echo "---------------------------------------------------------"
+echo "This install will download the sources for:"
 echo "  Free Pascal 3.0 and Lazarus"
 echo
-echo "It will not interfere with your existing development environment"
+echo "Then it will build the above for your system, which may"
+echo "take a few minutes."
+echo
+echo "The final install will not interfere with your existing"
+echo "development environment."
 echo
 
 # Ask for permission to proceed
@@ -293,6 +301,7 @@ export PPC_CONFIG_PATH=$BASE/fpc/bin
 export PATH=$PPC_CONFIG_PATH:$OLDPATH
 
 # Generate another valid fpc.cfg file
+rm $PPC_CONFIG_PATH/fpc.cfg
 $PPC_CONFIG_PATH/fpcmkcfg -d basepath=$BASE/fpc/lib/fpc/\$FPCVERSION -o $PPC_CONFIG_PATH/fpc.cfg
 
 find $BASE/fpc/packages -name "units" | xargs rm -rf
@@ -357,6 +366,8 @@ make all
 
 # Install anchor docking in the ide
 ./lazbuild ./components/anchordocking/design/anchordockingdsgn.lpk
+rm lazarus.old
+rm lazarus
 make useride
 
 # Strip down the new programs

@@ -323,11 +323,6 @@ replace "$BASE/lazarus/config" "*.xml" "$ORIGIN" "$BASE"
 replace "$BASE/lazarus/config" "*.cfg" "$ORIGIN" "$BASE"
 replace "$BASE/lazarus" "lazarus.sh" "$ORIGIN" "$BASE"
 replace "$BASE/lazarus" "lazarus.desktop" "$ORIGIN" "$BASE"
-ORIGIN="/home/boxuser/Development/FreePascal"
-replace "$BASE/lazarus/config" "*.xml" "$ORIGIN" "$BASE"
-replace "$BASE/lazarus/config" "*.cfg" "$ORIGIN" "$BASE"
-replace "$BASE/lazarus" "lazarus.sh" "$ORIGIN" "$BASE"
-replace "$BASE/lazarus" "lazarus.desktop" "$ORIGIN" "$BASE"
 
 chmod +x $BASE/lazarus/lazarus.desktop
 chmod +x $BASE/lazarus/lazarus.sh

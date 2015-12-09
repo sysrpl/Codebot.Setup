@@ -41,7 +41,7 @@ echo "  libgdk-pixbuf2.0-dev libatk1.0-dev libghc-x11-dev"
 echo
 
 # function require(program) 
-require() {
+function require() {
 	if ! type "$1" > /dev/null; then
 		echo 
 		echo "An error occured"
@@ -69,7 +69,7 @@ require "wget" "wget"
 require "7za" "p7zip-full"
 
 # function requirePackage(package) 
-requirePackage() {
+function requirePackage() {
 	if [ ! $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
 		echo "$1 not found"
 		echo 

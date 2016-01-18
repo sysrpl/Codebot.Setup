@@ -2,39 +2,54 @@
 
 set OLDPATH=%PATH%
 set BASE=C:\Development\build
-set PATH=%BASE%\fpc.2.6.4\bin\i386-win32;%PATH%
+set PATH=%BASE%\fpc.3.0.0\bin\i386-win32;%PATH%
 
 set STEP=Updating svn sources
 echo -- Step: %STEP% --
 
 cd %BASE%\fpc_svn
-svn update
+svn update -r 32964
 cd %BASE%\lazarus_svn
-svn revert -R .
-svn update
-del revision.txt
-svn info > revision.txt
-patch -p0 -i changes.diff
+svn update -r 51308
+cd %BASE%
 
 set STEP=Copying FPC sources
 echo -- Step: %STEP% --
 
-cd %BASE%
 rmdir fpc /s /q
-mkdir fpc
-xcopy fpc_svn\* fpc /e /h /EXCLUDE:exfpc.txt
+7z x fpc.source.7z
+REM mkdir fpc
+REM xcopy fpc_svn\* fpc /e /h /EXCLUDE:exfpc.txt
 
 set STEP=Trimming FPC
 echo -- Step: %STEP% --
-
-cd %BASE%\fpc
-rmdir tests /s /q
 
 set STEP=Compressing FPC
 echo -- Step: %STEP% --
 
 cd %BASE%
-7z a fpc.7z fpc || goto :error
+copy fpc.source.7z fpc.7z
+REM 7z a fpc.7z fpc || goto :error
+
+set STEP=Copying Lazarus sources
+echo -- Step: %STEP% --
+
+cd %BASE%
+rmdir lazarus /s /q
+7z x lazarus.source.7z
+REM mkdir lazarus
+REM xcopy lazarus_svn\* lazarus /e /h /EXCLUDE:exlaz.txt
+
+set STEP=Patching Lazarus
+echo -- Step: %STEP% --
+
+cd %BASE%\lazarus
+move .\images\splash_logo.png .\images\splash_logo_old.png
+copy ..\changes\lazarus\images\splash_logo.png .\images\splash_logo.png
+del .\images\splash_logo.res
+copy ..\changes\lazarus\images\splash_logo.res .\images\splash_logo.res
+REM copy ..\changes\lazarus\changes.diff .
+REM patch -p0 -i changes.diff >> %BASE%\patch_status.txt
 
 set STEP=FPC make all
 echo -- Step: %STEP% --
@@ -92,31 +107,10 @@ mv rtl\linux rtl.bak\linux
 rmdir rtl /s /q
 mv rtl.bak rtl
 
-set STEP=Copying Lazarus sources
-echo -- Step: %STEP% --
-
-cd %BASE%
-rmdir lazarus /s /q
-mkdir lazarus
-xcopy lazarus_svn\* lazarus /e /h /EXCLUDE:exlaz.txt
-
-set STEP=Patching Lazarus
-echo -- Step: %STEP% --
-
-cd %BASE%\lazarus
-mv .\images\splash_logo.png .\images\splash_logo_old.png
-copy ..\changes\lazarus\images\splash_logo.png .\images\splash_logo.png
-del .\images\splash_logo.res
-copy ..\changes\lazarus\images\splash_logo.res .\images\splash_logo.res
-
 set STEP=Creating Lazarus Linux config files
 echo -- Step: %STEP% --
 
 cd %BASE%\lazarus
-rmdir .\config /s /q
-del config
-mkdir config
-copy ..\changes\lazarus\linux\config .\config
 copy ..\changes\lazarus\linux\lazarus.desktop .\lazarus.desktop
 copy ..\changes\lazarus\linux\lazarus.sh .\lazarus.sh
 
@@ -130,10 +124,6 @@ set STEP=Creating Lazarus Windows config files
 echo -- Step: %STEP% --
 
 cd %BASE%\lazarus
-rmdir .\config /s /q
-del config
-mkdir config
-copy ..\changes\lazarus\config .\config
 del .\lazarus.desktop
 del .\lazarus.sh
 
@@ -143,6 +133,9 @@ echo -- Step: %STEP% --
 cd %BASE%\lazarus
 make all || goto :error
 .\lazbuild .\components\anchordocking\design\anchordockingdsgn.lpk || goto :error
+.\lazbuild .\components\sparta\dockedformeditor\sparta_dockedformeditor.lpk || goto :error
+.\lazbuild .\components\appexplore\appexplore.lpk || goto :error
+
 make useride || goto :error
 
 set STEP=Stripping Lazarus files
@@ -185,6 +178,8 @@ echo -- Step: %STEP% --
 
 cd %BASE%
 aws s3 cp %BASE%\lazarus.7z s3://cache.getlazarus.org/archives/lazarus.7z --acl public-read || goto :error
+
+goto :done
 
 :error
 echo -- Failed '%STEP%' with error #%ERRORLEVEL% --

@@ -1,38 +1,8 @@
-Index: components/ideintf/objectinspector.lfm
-===================================================================
---- components/ideintf/objectinspector.lfm	(revision 49893)
-+++ components/ideintf/objectinspector.lfm	(working copy)
-@@ -24,11 +24,11 @@
-   end
-   object AvailPersistentComboBox: TComboBox
-     Left = 0
--    Height = 23
-+    Height = 31
-     Top = 0
-     Width = 300
-     Align = alTop
--    ItemHeight = 15
-+    ItemHeight = 0
-     OnCloseUp = AvailComboBoxCloseUp
-     Style = csDropDownList
-     TabOrder = 0
-@@ -62,9 +62,9 @@
-     end
-     object FilterLabel: TLabel
-       Left = 3
--      Height = 15
-+      Height = 17
-       Top = 7
--      Width = 69
-+      Width = 86
-       Caption = 'Co&mponents'
-       FocusControl = CompFilterEdit
-       ParentColor = False
 Index: components/ideintf/projectintf.pas
 ===================================================================
---- components/ideintf/projectintf.pas	(revision 49893)
+--- components/ideintf/projectintf.pas	(revision 51308)
 +++ components/ideintf/projectintf.pas	(working copy)
-@@ -825,7 +825,7 @@
+@@ -948,7 +948,7 @@
  
  function TFileDescPascalUnit.GetUnitDirectives: string;
  begin
@@ -41,7 +11,7 @@ Index: components/ideintf/projectintf.pas
    if Owner is TLazProject then
      Result:=CompilerOptionsToUnitDirectives(Owner.LazCompilerOptions);
  end;
-@@ -862,7 +862,7 @@
+@@ -985,7 +985,7 @@
  var
    SyntaxMode: String;
  begin
@@ -50,7 +20,7 @@ Index: components/ideintf/projectintf.pas
    if CompOpts=nil then exit;
    SyntaxMode:=CompOpts.SyntaxMode;
    if SyntaxMode<>'' then begin
-@@ -899,7 +899,9 @@
+@@ -1022,7 +1022,9 @@
    LE = LineEnding;
  begin
    Result:=
@@ -61,9 +31,162 @@ Index: components/ideintf/projectintf.pas
      +'  T'+ResourceName+' = class('+ResourceClass.ClassName+')'+LE
      +'  private'+LE
      +'    { private declarations }'+LE
+Index: components/sparta/dockedformeditor/source/sparta_resizerframe.pas
+===================================================================
+--- components/sparta/dockedformeditor/source/sparta_resizerframe.pas	(revision 51308)
++++ components/sparta/dockedformeditor/source/sparta_resizerframe.pas	(working copy)
+@@ -146,6 +146,18 @@
+ 
+ {$R *.lfm}
+ 
++{ Node grip indices are as follows:
++
++       1
++0 +----+----+ 2
++  |         |
++7 +         + 3
++  |         |
++6 +----+----+ 4
++       5
++
++Only grips 3, 4, and 5 are sizeable }
++
+ { TResizerFrame }
+ 
+ // Tiles the source image over the given target canvas
+@@ -358,7 +370,6 @@
+     begin
+       BevelOuter := bvNone;
+       Color := clBlack;
+-
+       Name := 'Node' + IntToStr(Node);
+       Caption:='';
+       Width := SIZER_RECT_SIZE;
+@@ -366,30 +377,26 @@
+       Parent := Self;
+       Visible := True;
+       FNodes.Add(Panel);
+-
++      case Node of
++        3: Cursor := crSizeWE;
++        4: Cursor := crSizeNESW;
++        5: Cursor := crSizeNS;
++      end;
++      if Node in [3,4,5] then
++      begin
++        OnMouseDown := NodeMouseDown;
++        OnMouseMove := NodeMouseMove;
++        OnMouseUp := NodeMouseUp;
++      end;
+       with TShape.Create(Panel) do
+       begin
+         Parent := Panel;
+-        Align:= alClient;
+-
++        Align := alClient;
++        Enabled := False;
+         if Node in [3,4,5] then
+           Brush.Color:=clBtnFace
+         else
+           Brush.Color:=clGray;
+-
+-        case Node of
+-          {0,}4: Cursor := crSizeNWSE;
+-          {1,}5: Cursor := crSizeNS;
+-          //{2,}6: Cursor := crSizeNESW;
+-          3{,7}: Cursor := crSizeWE;
+-        end;
+-        if Node in [3,4,5] then
+-        begin
+-          OnMouseDown := NodeMouseDown;
+-          OnMouseMove := NodeMouseMove;
+-          OnMouseUp := NodeMouseUp;
+-        end;
+-
+       end;
+     end;
+   end;
+@@ -411,12 +418,9 @@
+ procedure TResizerFrame.NodeMouseDown(Sender: TObject; Button: TMouseButton;
+   Shift: TShiftState; X, Y: Integer);
+ var
+-  LCtrlPoint: TPoint;
++  Point: TPoint;
+ begin
+-  if Sender is TGraphicControl then
+-    Sender := TGraphicControl(Sender).Parent;
+-
+-  if (Enabled) AND (Sender is TWinControl) then
++  if Enabled then
+   begin
+     FNodePositioning:=True;
+ 
+@@ -459,15 +463,15 @@
+     // perform first "click delta" to reduce leap
+     // + calculate delta created by scrollbars and theirs position...
+     FillChar(FDelta, SizeOf(FDelta), #0);
+-    LCtrlPoint := (Sender as TWinControl).ScreenToClient(Mouse.CursorPos);
++    Point := (Sender as TWinControl).ScreenToClient(Mouse.CursorPos);
+     if Sender = pR then
+     begin
+-      FDelta.X := -(LCtrlPoint.x - RightSizerLineWidth) + RightMargin;
++      FDelta.X := -(Point.x - RightSizerLineWidth) + RightMargin;
+       FPositioningKind := [pkRight];
+     end
+     else if Sender = pB then
+     begin
+-      FDelta.Y := -(LCtrlPoint.y - BottomSizerLineWidth) + BottomMargin;
++      FDelta.Y := -(Point.y - BottomSizerLineWidth) + BottomMargin;
+       FPositioningKind := [pkBottom];
+     end
+     else
+@@ -474,18 +478,18 @@
+       case FNodes.IndexOf(Sender) of
+         3: // middle right
+           begin
+-            FDelta.X := -(LCtrlPoint.x - RightSizerRectWidth) + RightMargin;
++            FDelta.X := -(Point.x - RightSizerRectWidth) + RightMargin;
+             FPositioningKind := [pkRight];
+           end;
+         4: // right bottom
+           begin
+-            FDelta.X := -(LCtrlPoint.x - RightSizerRectWidth) + RightMargin;
+-            FDelta.Y := -(LCtrlPoint.y - BottomSizerRectHeight) + BottomMargin;
++            FDelta.X := -(Point.x - RightSizerRectWidth) + RightMargin;
++            FDelta.Y := -(Point.y - BottomSizerRectHeight) + BottomMargin;
+             FPositioningKind := [pkRight, pkBottom];
+           end;
+         5: // middle bottom
+           begin
+-            FDelta.Y := -(LCtrlPoint.y - BottomSizerRectHeight) + BottomMargin;
++            FDelta.Y := -(Point.y - BottomSizerRectHeight) + BottomMargin;
+             FPositioningKind := [pkBottom];
+           end;
+       end;
+@@ -500,10 +504,6 @@
+   OldRect: TRect;
+   AdjL,AdjR,AdjT,AdjB: Boolean;
+ begin
+-  // handle TPanel for resizing rectangles
+-  if Sender is TGraphicControl then
+-    Sender := TGraphicControl(Sender).Parent;
+-
+   if FNodePositioning then
+   begin
+     begin
+@@ -592,9 +592,6 @@
+ procedure TResizerFrame.NodeMouseUp(Sender: TObject; Button: TMouseButton;
+   Shift: TShiftState; X, Y: Integer);
+ begin
+-  if Sender is TGraphicControl then
+-    Sender := TGraphicControl(Sender).Parent;
+-
+   if FNodePositioning then
+   begin
+     Screen.Cursor := crDefault;
 Index: ide/aboutfrm.lfm
 ===================================================================
---- ide/aboutfrm.lfm	(revision 49893)
+--- ide/aboutfrm.lfm	(revision 51308)
 +++ ide/aboutfrm.lfm	(working copy)
 @@ -25,94 +25,92 @@
      OnChange = NotebookPageChanged
@@ -225,10 +348,18 @@ Index: ide/aboutfrm.lfm
        AutoSize = True
        BorderSpacing.Around = 6
        Cancel = True
-Index: ide/aboutfrm.pas
 ===================================================================
---- ide/aboutfrm.pas	(revision 49893)
+--- ide/aboutfrm.pas	(revision 51308)
 +++ ide/aboutfrm.pas	(working copy)
+@@ -157,7 +157,7 @@
+   LogoImage.Picture.LoadFromResourceName(HInstance, 'splash_logo', TPortableNetworkGraphic);
+   Caption:=lisAboutLazarus;
+   VersionLabel.Caption := lisVersion+' #: '+ GetLazarusVersionString;
+-  RevisionLabel.Caption := lisSVNRevision+LazarusRevisionStr;
++  RevisionLabel.Caption := lisSVNRevision+'51308';
+   BuildDateLabel.Caption := lisDate+': '+GetLocalizedBuildDate;
+   FPCVersionLabel.Caption:= lisFPCVersion+{$I %FPCVERSION%};
+   PlatformLabel.Caption:=GetCompiledTargetCPU+'-'+GetCompiledTargetOS
 @@ -171,7 +171,6 @@
    AcknowledgementsPage.DoubleBuffered := True;
    miVerToClipboard.Caption := lisVerToClipboard;
@@ -237,330 +368,9 @@ Index: ide/aboutfrm.pas
  
    Constraints.MinWidth:= 460;
    Constraints.MinHeight:= 380;
-Index: ide/componentlist.lfm
-===================================================================
---- ide/componentlist.lfm	(revision 49893)
-+++ ide/componentlist.lfm	(working copy)
-@@ -13,112 +13,108 @@
-   OnShow = FormShow
-   LCLVersion = '1.5'
-   object PageControl: TPageControl
--    AnchorSideLeft.Control = Owner
--    AnchorSideTop.Control = FilterPanel
--    AnchorSideTop.Side = asrBottom
--    AnchorSideRight.Control = Owner
--    AnchorSideRight.Side = asrBottom
--    AnchorSideBottom.Control = ButtonPanel
-     Left = 0
--    Height = 400
--    Top = 27
-+    Height = 438
-+    Top = 29
-     Width = 300
--    ActivePage = TabSheetList
-+    ActivePage = TabSheetPaletteTree
-     Anchors = [akTop, akLeft, akRight, akBottom]
-     TabIndex = 0
-     TabOrder = 1
-     OnChange = PageControlChange
--    object TabSheetList: TTabSheet
--      Caption = 'List'
--      ClientHeight = 375
-+    object TabSheetPaletteTree: TTabSheet
-+      Caption = 'Palette'
-+      ClientHeight = 407
-       ClientWidth = 296
--      object Panel7: TPanel
-+      object pnPaletteTree: TPanel
-         Left = 0
--        Height = 375
-+        Height = 407
-         Top = 0
-         Width = 296
-         Align = alClient
-         BevelOuter = bvNone
--        BorderWidth = 2
--        ClientHeight = 375
-+        BorderWidth = 5
-+        ClientHeight = 407
-         ClientWidth = 296
-         TabOrder = 0
--        object ListTree: TTreeView
--          Left = 2
--          Height = 371
--          Top = 2
--          Width = 292
-+        object PalletteTree: TTreeView
-+          Left = 5
-+          Height = 397
-+          Top = 5
-+          Width = 286
-           Align = alClient
-           DefaultItemHeight = 26
-           Images = imListPalette
--          Indent = 25
-+          PopupMenu = pmCollapseExpand
-           ReadOnly = True
-+          RightClickSelect = True
-           RowSelect = True
--          ShowButtons = False
-+          ScrollBars = ssAutoVertical
-           ShowLines = False
--          ShowRoot = False
-           TabOrder = 0
-           OnChange = ComponentsChange
-           OnDblClick = ComponentsDblClick
-           OnKeyPress = TreeKeyPress
--          Options = [tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRowSelect, tvoToolTips]
-+          Options = [tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoRowSelect, tvoShowButtons, tvoShowRoot, tvoToolTips]
-         end
-       end
-     end
--    object TabSheetPaletteTree: TTabSheet
--      Caption = 'Palette'
--      ClientHeight = 375
-+    object TabSheetList: TTabSheet
-+      Caption = 'List'
-+      ClientHeight = 407
-       ClientWidth = 296
--      object pnPaletteTree: TPanel
-+      object Panel7: TPanel
-         Left = 0
--        Height = 375
-+        Height = 407
-         Top = 0
-         Width = 296
-         Align = alClient
-         BevelOuter = bvNone
--        BorderWidth = 5
--        ClientHeight = 375
-+        BorderWidth = 2
-+        ClientHeight = 407
-         ClientWidth = 296
-         TabOrder = 0
--        object PalletteTree: TTreeView
--          Left = 5
--          Height = 365
--          Top = 5
--          Width = 286
-+        object ListTree: TTreeView
-+          Left = 2
-+          Height = 403
-+          Top = 2
-+          Width = 292
-           Align = alClient
-           DefaultItemHeight = 26
-           Images = imListPalette
--          PopupMenu = pmCollapseExpand
-+          Indent = 25
-           ReadOnly = True
--          RightClickSelect = True
-           RowSelect = True
-+          ScrollBars = ssAutoVertical
-+          ShowButtons = False
-           ShowLines = False
-+          ShowRoot = False
-           TabOrder = 0
-           OnChange = ComponentsChange
-           OnDblClick = ComponentsDblClick
-           OnKeyPress = TreeKeyPress
--          Options = [tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoRowSelect, tvoShowButtons, tvoShowRoot, tvoToolTips]
-+          Options = [tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRowSelect, tvoToolTips]
-         end
-       end
-     end
-     object TabSheetInheritance: TTabSheet
-       Caption = 'Inheritance'
--      ClientHeight = 375
-+      ClientHeight = 407
-       ClientWidth = 296
-       object Panel6: TPanel
-         Left = 0
--        Height = 375
-+        Height = 407
-         Top = 0
-         Width = 296
-         Align = alClient
-         BevelOuter = bvNone
-         BorderWidth = 5
--        ClientHeight = 375
-+        ClientHeight = 407
-         ClientWidth = 296
-         TabOrder = 0
-         object InheritanceTree: TTreeView
-           Left = 5
--          Height = 365
-+          Height = 397
-           Top = 5
-           Width = 286
-           Align = alClient
-@@ -129,6 +125,7 @@
-           ReadOnly = True
-           RightClickSelect = True
-           RowSelect = True
-+          ScrollBars = ssAutoVertical
-           TabOrder = 0
-           OnChange = ComponentsChange
-           OnDblClick = ComponentsDblClick
-@@ -141,13 +138,13 @@
-   object FilterPanel: TPanel
-     AnchorSideRight.Side = asrBottom
-     Left = 1
--    Height = 27
-+    Height = 29
-     Top = 0
-     Width = 300
-     Anchors = [akTop, akLeft, akRight]
-     AutoSize = True
-     BevelOuter = bvNone
--    ClientHeight = 27
-+    ClientHeight = 29
-     ClientWidth = 300
-     TabOrder = 0
-     object LabelSearch: TLabel
-@@ -154,9 +151,9 @@
-       AnchorSideLeft.Control = FilterPanel
-       AnchorSideTop.Control = FilterPanel
-       Left = 6
--      Height = 15
-+      Height = 17
-       Top = 6
--      Width = 74
-+      Width = 82
-       BorderSpacing.Around = 6
-       Caption = 'LabelSearch'
-       ParentColor = False
-@@ -166,10 +163,10 @@
-       AnchorSideLeft.Side = asrBottom
-       AnchorSideTop.Control = LabelSearch
-       AnchorSideTop.Side = asrCenter
--      Left = 86
--      Height = 21
--      Top = 3
--      Width = 210
-+      Left = 94
-+      Height = 27
-+      Top = 1
-+      Width = 202
-       OnAfterFilter = TreeFilterEdAfterFilter
-       ButtonWidth = 23
-       NumGlyphs = 1
-@@ -180,24 +177,6 @@
-       FilteredTreeview = ListTree
-     end
-   end
--  object ButtonPanel: TButtonPanel
--    Left = 6
--    Height = 28
--    Top = 433
--    Width = 288
--    OKButton.Name = 'OKButton'
--    OKButton.DefaultCaption = True
--    OKButton.OnClick = OKButtonClick
--    HelpButton.Name = 'HelpButton'
--    HelpButton.DefaultCaption = True
--    CloseButton.Name = 'CloseButton'
--    CloseButton.DefaultCaption = True
--    CancelButton.Name = 'CancelButton'
--    CancelButton.DefaultCaption = True
--    TabOrder = 2
--    ShowButtons = [pbOK]
--    ShowBevel = False
--  end
-   object imListPalette: TImageList
-     Height = 24
-     Width = 24
-@@ -206,8 +185,8 @@
-   end
-   object pmCollapseExpand: TPopupMenu
-     OnPopup = pmCollapseExpandPopup
--    left = 160
--    top = 112
-+    left = 192
-+    top = 104
-     object miExpand: TMenuItem
-       Caption = 'Expand'
-       OnClick = miExpandClick
-Index: ide/componentlist.pas
-===================================================================
---- ide/componentlist.pas	(revision 49893)
-+++ ide/componentlist.pas	(working copy)
-@@ -32,9 +32,9 @@
- interface
- 
- uses
--  Classes, SysUtils, LCLType, Forms, Controls, Graphics, StdCtrls, ExtCtrls,
--  ComCtrls, ButtonPanel, Menus, LazarusIDEStrConsts, ComponentReg, PackageDefs,
--  IDEImagesIntf, TreeFilterEdit, FormEditingIntf, IDEOptionDefs;
-+  Classes, SysUtils, mysql40conn, LCLType, Forms, Controls, Graphics, StdCtrls,
-+  ExtCtrls, ComCtrls, ButtonPanel, Menus, LazarusIDEStrConsts, ComponentReg,
-+  PackageDefs, IDEImagesIntf, TreeFilterEdit, FormEditingIntf, IDEOptionDefs;
- 
- type
- 
-@@ -44,7 +44,7 @@
-     imListPalette: TImageList;
-     imInheritance: TImageList;
-     ListTree: TTreeView;
--    ButtonPanel: TButtonPanel;
-+    MenuItem1: TMenuItem;
-     miCollapse: TMenuItem;
-     miCollapseAll: TMenuItem;
-     miExpand: TMenuItem;
-@@ -120,7 +120,7 @@
-   TabSheetList.Caption := lisCmpLstList;
-   TabSheetPaletteTree.Caption := lisCmpLstPalette;
-   TabSheetInheritance.Caption := lisCmpLstInheritance;
--  ButtonPanel.OKButton.Caption := lisUseAndClose;
-+  //ButtonPanel.OKButton.Caption := lisUseAndClose;
- 
-   imListPalette.Width  := ComponentPaletteImageWidth;
-   imListPalette.Height := ComponentPaletteImageHeight;
-@@ -131,7 +131,7 @@
-   PalletteTree.Images := imListPalette;
-   InheritanceTree.Images := imInheritance;
-   PrevPageIndex := -1;
--  PageControl.ActivePage := TabSheetList;
-+  PageControl.ActivePage := TabSheetPaletteTree;
-   if Assigned(IDEComponentPalette) then
-   begin
-     UpdateComponents;
-@@ -157,13 +157,13 @@
-   if Assigned(Parent) then
-     ParentParent := Parent.Parent;
-   //DebugLn(['*** TComponentListForm.FormShow, Parent=', Parent, ', Parent.Parent=', ParentParent]);
--  ButtonPanel.Visible := ParentParent=Nil;
-+  {ButtonPanel.Visible := ParentParent=Nil;
-   if ButtonPanel.Visible then begin
-     PageControl.AnchorSideBottom.Side := asrTop;
-     UpdateButtonState;
-   end
-   else
--    PageControl.AnchorSideBottom.Side := asrBottom;
-+    PageControl.AnchorSideBottom.Side := asrBottom;}
- 
-   if not Assigned(Parent) then//only in undocked IDE
-   begin
-@@ -237,13 +237,13 @@
- 
- procedure TComponentListForm.UpdateButtonState;
- begin
--  ButtonPanel.OKButton.Enabled := Assigned(GetSelectedComponent);
-+  //ButtonPanel.OKButton.Enabled := Assigned(GetSelectedComponent);
- end;
- 
- procedure TComponentListForm.UpdateShowing;
- begin
--  if (ButtonPanel<>nil) and ButtonPanel.Visible then
--    UpdateButtonState;
-+  {if (ButtonPanel<>nil) and ButtonPanel.Visible then
-+    UpdateButtonState;}
-   inherited UpdateShowing;
- end;
- 
 Index: ide/include/unix/lazbaseconf.inc
 ===================================================================
---- ide/include/unix/lazbaseconf.inc	(revision 49893)
+--- ide/include/unix/lazbaseconf.inc	(revision 51308)
 +++ ide/include/unix/lazbaseconf.inc	(working copy)
 @@ -142,12 +142,16 @@
    procedure InternalInit;
@@ -583,7 +393,7 @@ Index: ide/include/unix/lazbaseconf.inc
  
 Index: ide/include/win/lazbaseconf.inc
 ===================================================================
---- ide/include/win/lazbaseconf.inc	(revision 49893)
+--- ide/include/win/lazbaseconf.inc	(revision 51308)
 +++ ide/include/win/lazbaseconf.inc	(working copy)
 @@ -141,6 +141,8 @@
    procedure InternalInit;
@@ -598,90 +408,20 @@ Index: ide/include/win/lazbaseconf.inc
    // the last part of the path returned by GetAppConfigDir is the application
    // name. Replace that by 'lazarus', to make sure that lazbuild uses
    // the same primary config path
--  PrimaryConfigPath:= ExtractFilePath(ChompPathDelim(SysToUTF8(GetAppConfigDir(False)))) + 'lazarus';
-+  //PrimaryConfigPath:= ExtractFilePath(ChompPathDelim(SysToUTF8(GetAppConfigDir(False)))) + 'lazarus';
+-  PrimaryConfigPath:= ExtractFilePath(ChompPathDelim(GetAppConfigDirUTF8(False))) + 'lazarus';
++  // PrimaryConfigPath:= ExtractFilePath(ChompPathDelim(GetAppConfigDirUTF8(False))) + 'lazarus';
 +  S := ExpandFileNameUTF8(ParamStrUTF8(0));
 +  S := ExtractFileDir(S);
 +  S := IncludeTrailingPathDelimiter(S) + 'config';
-+  PrimaryConfigPath:= S;
++  PrimaryConfigPath:= S;  
    SecondaryConfigPath:=ChompPathDelim(ProgramDirectory);
    DefaultFPCSrcDirs[1] := AppendPathDelim(ProgramDirectory) + 'fpcsrc';
    DefaultLazarusSrcDirs[1] := DefaultDrive + '\lazarus';
-Index: ide/lazarus.lpi
-===================================================================
---- ide/lazarus.lpi	(revision 49893)
-+++ ide/lazarus.lpi	(working copy)
-@@ -798,6 +798,7 @@
-       <Unit126>
-         <Filename Value="mainbase.pas"/>
-         <IsPartOfProject Value="True"/>
-+        <UnitName Value="MainBase"/>
-       </Unit126>
-       <Unit127>
-         <Filename Value="buildmanager.pas"/>
-Index: ide/lazarus.pp
-===================================================================
---- ide/lazarus.pp	(revision 49893)
-+++ ide/lazarus.pp	(working copy)
-@@ -50,7 +50,7 @@
-   {$IF defined(Unix)}
-   clocale,
-   {$IFEND}
--  SysUtils,
-+  SysUtils, Classes,
-   Interfaces,
-   Forms, LCLProc,
-   IDEOptionsIntf,
-@@ -76,7 +76,31 @@
- {$R lazarus.res}
- {$R ../images/laz_images.res}
- 
-+function LoadRevision: string;
-+var
-+  Strings: TStringList;
-+  S: string;
- begin
-+  S := ExtractFilePath(ParamStr(0));
-+  S := IncludeTrailingPathDelimiter(S) + 'revision.txt';
-+	Result := '';
-+  if FileExists(S) then
-+  begin
-+    Strings := TStringList.Create;
-+    Strings.NameValueSeparator := ':';
-+    Strings.LoadFromFile(S);
-+    Result := Trim(Strings.Values['Revision']);
-+    LazarusScanned := Strings.Values['Scanned'] <> '';
-+    Strings.Values['Scanned'] := ' true';
-+    if not LazarusScanned then
-+      Strings.SaveToFile(S);
-+    Strings.Free;
-+	end;
-+  if Result = '' then
-+    Result := 'Unknown';
-+end;
-+
-+begin
-   HasGUI:=true;
-   {$IFDEF IDE_MEM_CHECK}CheckHeapWrtMemCnt('lazarus.pp: begin');{$ENDIF}
- 
-@@ -90,7 +114,7 @@
- 
-   // end of build flags
-   
--  LazarusRevisionStr:=RevisionStr;
-+  LazarusRevisionStr:=LoadRevision;
-   Application.Title:='Lazarus';
-   OnGetApplicationName:=@GetLazarusApplicationName;
- 
-Index: ide/lazarus.res
-===================================================================
-Cannot display: file marked as a binary type.
-svn:mime-type = application/octet-stream
 Index: ide/lazarusidestrconsts.pas
 ===================================================================
---- ide/lazarusidestrconsts.pas	(revision 49893)
+--- ide/lazarusidestrconsts.pas	(revision 51308)
 +++ ide/lazarusidestrconsts.pas	(working copy)
-@@ -4571,7 +4571,7 @@
+@@ -4599,7 +4599,7 @@
    lisProjInspDeleteDependencyFor = 'Delete dependency for %s?';
    lisProjInspRemoveFileFromProject = 'Remove file %s from project?';
    lisProjInspRemovedRequiredPackages = 'Removed required packages';
@@ -692,9 +432,9 @@ Index: ide/lazarusidestrconsts.pas
    lisCoolbarOptions = 'IDE CoolBar';
 Index: ide/main.pp
 ===================================================================
---- ide/main.pp	(revision 49893)
+--- ide/main.pp	(revision 51308)
 +++ ide/main.pp	(working copy)
-@@ -171,6 +171,7 @@
+@@ -169,6 +169,7 @@
  
    TMainIDE = class(TMainIDEBase)
    private
@@ -702,7 +442,7 @@ Index: ide/main.pp
      // event handlers
      procedure MainIDEFormClose(Sender: TObject; var {%H-}CloseAction: TCloseAction);
      procedure MainIDEFormCloseQuery(Sender: TObject; var CanClose: boolean);
-@@ -1526,6 +1527,19 @@
+@@ -1558,6 +1559,19 @@
    HelpBoss.LoadHelpOptions;
  end;
  
@@ -722,9 +462,9 @@ Index: ide/main.pp
  procedure TMainIDE.StartIDE;
  begin
    {$IFDEF IDE_MEM_CHECK}CheckHeapWrtMemCnt('TMainIDE.StartIDE START');{$ENDIF}
-@@ -1557,6 +1571,7 @@
-   fUserInputSinceLastIdle:=true; // Idle work gets done initially before user action.
-   MainIDEBar.ApplicationIsActivate:=true;
+@@ -1591,6 +1605,7 @@
+   LazIDEInstances.StartListening(@LazInstancesStartNewInstance, @LazInstancesGetOpenedProjectFileName);
+   IDECommandList.StartUpdateEvents;
    FIDEStarted:=true;
 +  CheckRescan;
    {$IFDEF IDE_MEM_CHECK}CheckHeapWrtMemCnt('TMainIDE.StartIDE END');{$ENDIF}
@@ -732,9 +472,9 @@ Index: ide/main.pp
  
 Index: ide/mainbase.pas
 ===================================================================
---- ide/mainbase.pas	(revision 49893)
+--- ide/mainbase.pas	(revision 51308)
 +++ ide/mainbase.pas	(working copy)
-@@ -288,6 +288,8 @@
+@@ -289,6 +289,8 @@
      set KeepInstalledPackages to true. }
  var KeepInstalledPackages: boolean = false;
  
@@ -745,9 +485,9 @@ Index: ide/mainbase.pas
  function GetMainIde: TMainIDEBase;
 Index: ide/mainintf.pas
 ===================================================================
---- ide/mainintf.pas	(revision 49893)
+--- ide/mainintf.pas	(revision 51308)
 +++ ide/mainintf.pas	(working copy)
-@@ -600,7 +600,9 @@
+@@ -591,7 +591,9 @@
  begin
    LE:=LineEnding;
    Result:=
@@ -760,9 +500,9 @@ Index: ide/mainintf.pas
      +'    { private declarations }'+LE
 Index: ide/projectdefs.pas
 ===================================================================
---- ide/projectdefs.pas	(revision 49893)
+--- ide/projectdefs.pas	(revision 51308)
 +++ ide/projectdefs.pas	(working copy)
-@@ -1279,7 +1279,7 @@
+@@ -1278,7 +1278,7 @@
    // create program source
    NewSource:='program Project1;'+LineEnding
      +LineEnding
@@ -771,7 +511,7 @@ Index: ide/projectdefs.pas
      +LineEnding
      +'uses'+LineEnding
      +'  {$IFDEF UNIX}{$IFDEF UseCThreads}'+LineEnding
-@@ -1396,7 +1396,7 @@
+@@ -1395,7 +1395,7 @@
    // create program source
    NewSource:='program Project1;'+LineEnding
      +LineEnding
@@ -780,7 +520,7 @@ Index: ide/projectdefs.pas
      +LineEnding
      +'uses'+LineEnding
      +'  {$IFDEF UNIX}{$IFDEF UseCThreads}'+LineEnding
-@@ -1461,7 +1461,7 @@
+@@ -1460,7 +1460,7 @@
      // create program source
      NewSource:='program Project1;'+LineEnding
        +LineEnding
@@ -789,7 +529,7 @@ Index: ide/projectdefs.pas
        +LineEnding
        +'uses'+LineEnding
        +'  Classes, SysUtils'+LineEnding
-@@ -1553,7 +1553,7 @@
+@@ -1552,7 +1552,7 @@
    NewSource:=TStringList.Create;
    NewSource.Add('program Project1;');
    NewSource.Add('');
@@ -798,7 +538,7 @@ Index: ide/projectdefs.pas
    NewSource.Add('');
    NewSource.Add('uses');
    NewSource.Add('  {$IFDEF UNIX}{$IFDEF UseCThreads}');
-@@ -1562,10 +1562,9 @@
+@@ -1561,10 +1561,9 @@
    NewSource.Add('  Classes, SysUtils, CustApp');
    NewSource.Add('  { you can add units after this };');
    NewSource.Add('');
@@ -810,7 +550,7 @@ Index: ide/projectdefs.pas
    NewSource.Add('  '+C+' = class(TCustomApplication)');
    NewSource.Add('  protected');
    NewSource.Add('    procedure DoRun; override;');
-@@ -1699,7 +1698,7 @@
+@@ -1698,7 +1697,7 @@
    // create program source
    NewSource:='library Project1;'+LineEnding
      +LineEnding
@@ -821,7 +561,7 @@ Index: ide/projectdefs.pas
      +'  Classes'+LineEnding
 Index: ide/projectinspector.lfm
 ===================================================================
---- ide/projectinspector.lfm	(revision 49893)
+--- ide/projectinspector.lfm	(revision 51308)
 +++ ide/projectinspector.lfm	(working copy)
 @@ -36,7 +36,7 @@
    object BtnPanel: TPanel
@@ -850,118 +590,9 @@ Index: ide/projectinspector.lfm
      TabOrder = 2
    end
    object ItemsPopupMenu: TPopupMenu
-Index: ide/searchresultview.lfm
-===================================================================
---- ide/searchresultview.lfm	(revision 49893)
-+++ ide/searchresultview.lfm	(working copy)
-@@ -1,7 +1,7 @@
- object SearchResultsView: TSearchResultsView
--  Left = 344
-+  Left = 325
-   Height = 273
--  Top = 327
-+  Top = 346
-   Width = 799
-   BorderIcons = [biSystemMenu]
-   Caption = 'SearchResultsView'
-@@ -16,10 +16,11 @@
-     AnchorSideTop.Control = ToolBar
-     AnchorSideTop.Side = asrBottom
-     Left = 0
--    Height = 249
--    Top = 24
-+    Height = 245
-+    Top = 28
-     Width = 799
-     Anchors = [akTop, akLeft, akRight, akBottom]
-+    BorderSpacing.Top = 4
-     MultiLine = True
-     TabOrder = 1
-     OnChange = ResultsNoteBookPageChanged
-@@ -29,9 +30,9 @@
-   end
-   object ToolBar: TToolBar
-     Left = 0
--    Height = 24
--    Top = 0
--    Width = 57
-+    Height = 22
-+    Top = 2
-+    Width = 47
-     Align = alNone
-     AutoSize = True
-     EdgeBorders = []
-@@ -39,7 +40,7 @@
-     TabOrder = 2
-     object SearchAgainButton: TToolButton
-       Left = 1
--      Top = 2
-+      Top = 0
-       Caption = 'SearchAgainButton'
-       ImageIndex = 0
-       OnClick = SearchAgainButtonClick
-@@ -46,19 +47,11 @@
-     end
-     object ClosePageButton: TToolButton
-       Left = 24
--      Top = 2
-+      Top = 0
-       Caption = 'ClosePageButton'
-       ImageIndex = 1
-       OnClick = ClosePageButtonClick
-     end
--    object ToolButton3: TToolButton
--      Left = 47
--      Height = 22
--      Top = 2
--      Width = 10
--      Caption = 'ToolButton3'
--      Style = tbsSeparator
--    end
-   end
-   object SearchInListEdit: TTreeFilterEdit
-     AnchorSideLeft.Control = ToolBar
-@@ -65,9 +58,9 @@
-     AnchorSideLeft.Side = asrBottom
-     AnchorSideTop.Control = ToolBar
-     AnchorSideTop.Side = asrCenter
--    Left = 63
--    Height = 23
--    Top = 1
-+    Left = 53
-+    Height = 27
-+    Top = 0
-     Width = 296
-     UseFormActivate = True
-     ButtonWidth = 23
-Index: ide/searchresultview.pp
-===================================================================
---- ide/searchresultview.pp	(revision 49893)
-+++ ide/searchresultview.pp	(working copy)
-@@ -140,7 +140,6 @@
-     ResultsNoteBook: TPageControl;
-     ToolBar: TToolBar;
-     SearchAgainButton: TToolButton;
--    ToolButton3: TToolButton;
-     ClosePageButton: TToolButton;
-     SearchInListEdit: TTreeFilterEdit;
-     procedure actNextPageExecute(Sender: TObject);
-Index: ide/splash.lfm
-===================================================================
---- ide/splash.lfm	(revision 49893)
-+++ ide/splash.lfm	(working copy)
-@@ -12,7 +12,7 @@
-   ClientWidth = 429
-   FormStyle = fsSplash
-   Position = poScreenCenter
--  LCLVersion = '0.9.29'
-+  LCLVersion = '1.5'
-   object Image: TImage
-     Left = 0
-     Height = 341
 Index: ide/splash.pp
 ===================================================================
---- ide/splash.pp	(revision 49893)
+--- ide/splash.pp	(revision 51308)
 +++ ide/splash.pp	(working copy)
 @@ -81,7 +81,7 @@
        EndEllipsis: False;
@@ -972,3 +603,110 @@ Index: ide/splash.pp
  
  constructor TSplashForm.Create(AOwner: TComponent);
  begin
+Index: lcl/controls.pp
+===================================================================
+--- lcl/controls.pp	(revision 51308)
++++ lcl/controls.pp	(working copy)
+@@ -466,6 +466,12 @@
+   TGetSiteInfoEvent = procedure(Sender: TObject; DockClient: TControl;
+     var InfluenceRect: TRect; MousePos: TPoint; var CanDock: Boolean) of object;
+ 
++  TDrawDockImage = procedure(AOldRect, ANewRect: TRect; AOperation: TDockImageOperation);
++
++var
++  DrawDockImage: TDrawDockImage = nil;
++
++type
+   TDragDockObject = class(TDragObject)
+   private
+     FDockOffset: TPoint;
+Index: lcl/forms.pp
+===================================================================
+--- lcl/forms.pp	(revision 51308)
++++ lcl/forms.pp	(working copy)
+@@ -2143,6 +2143,36 @@
+      or ((csDesigning in LForm.ComponentState) and (LForm.Designer <> nil));
+ end;
+ 
++type
++  TDockImageWindow = class(THintWindow)
++  public
++    constructor Create(AOwner: TComponent); override;
++  end;
++
++constructor TDockImageWindow.Create(AOwner: TComponent);
++begin
++  inherited Create(AOwner);
++  Color := clHighlight;
++  Width := 100;
++  Height := 100;
++  AlphaBlend := True;
++  AlphaBlendValue := 100;
++end;
++
++var
++  DockImageWindow: TDockImageWindow;
++
++procedure HintDockImage(AOldRect, ANewRect: TRect; AOperation: TDockImageOperation);
++begin
++  if DockImageWindow = nil then
++    DockImageWindow := TDockImageWindow.Create(Application);
++  DockImageWindow.BoundsRect := ANewRect;
++  if AOperation = disShow then
++    DockImageWindow.Show
++  else if AOperation = disHide then
++    DockImageWindow.Hide;
++end;
++
+ initialization
+   RegisterPropertyToSkip(TForm, 'OldCreateOrder', 'VCL compatibility property', '');
+   RegisterPropertyToSkip(TForm, 'TextHeight', 'VCL compatibility property', '');
+@@ -2153,7 +2183,7 @@
+   IsFormDesign := @IsFormDesignFunction;
+   Screen:=TScreen.Create(nil);
+   Application:=TApplication.Create(nil);
+-
++  DrawDockImage := @HintDockImage;
+ finalization
+   //DebugLn('forms.pp - finalization section');
+   LCLProc.OwnerFormDesignerModifiedProc:=nil;
+Index: lcl/include/dragobject.inc
+===================================================================
+--- lcl/include/dragobject.inc	(revision 51308)
++++ lcl/include/dragobject.inc	(working copy)
+@@ -135,7 +135,10 @@
+ 
+ procedure TDragDockObject.ShowDockImage;
+ begin
+-  WidgetSet.DrawDefaultDockImage(EraseDockRect, DockRect, disShow);
++  if Assigned(DrawDockImage) then
++    DrawDockImage(EraseDockRect, DockRect, disShow)
++  else
++    WidgetSet.DrawDefaultDockImage(EraseDockRect, DockRect, disShow);
+   EraseDockRect := DockRect;
+ end;
+ 
+@@ -142,7 +145,10 @@
+ procedure TDragDockObject.HideDockImage;
+ begin
+   if FEraseDockRect.Left<MaxInt then
+-    WidgetSet.DrawDefaultDockImage(EraseDockRect, DockRect, disHide);
++    if Assigned(DrawDockImage) then
++      DrawDockImage(EraseDockRect, DockRect, disHide)
++    else
++      WidgetSet.DrawDefaultDockImage(EraseDockRect, DockRect, disHide);
+   FEraseDockRect := Rect(MaxInt, 0, MaxInt, 0);
+ end;
+ 
+@@ -151,7 +157,10 @@
+   //Draw the form outlines when the position has changed
+   if not CompareRect(@DockRect, @EraseDockRect) then
+   begin
+-    WidgetSet.DrawDefaultDockImage(EraseDockRect, DockRect, disMove);
++    if Assigned(DrawDockImage) then
++      DrawDockImage(EraseDockRect, DockRect, disMove)
++    else
++      WidgetSet.DrawDefaultDockImage(EraseDockRect, DockRect, disMove);
+     EraseDockRect := DockRect;
+   end;
+ end;

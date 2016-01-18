@@ -3,7 +3,7 @@
 
 #define MyAppName "Free Pascal 3.0 with Lazarus"
 #define MyAppShort "Free Pascal 3.0"
-#define MyAppVersion "3.0"
+#define MyAppVerName "December 2015 release"
 #define MyAppPublisher "www.getlazarus.org"
 #define MyAppURL "http://www.getlazarus.org/"
 #define MyAppExeName "lazarus.exe"
@@ -14,8 +14,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{A3D5ACB9-BDF6-405E-96A3-9E70EDB2FC52}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
+AppVerName={#MyAppVerName}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
@@ -56,8 +55,8 @@ Name: "{commondesktop}\{#MyAppShort}"; Filename: "{app}\lazarus\{#MyAppExeName}"
 Name: "{app}\{#MyAppShort}"; Filename: "{app}\lazarus\{#MyAppExeName}"
 
 [Run]
-Filename: "{app}\fpc\bin\i386-win32\fpcmkcfg.exe"; Parameters: "-d ""basepath={app}\fpc"" -o ""{app}\fpc\bin\i386-win32\fpc.cfg"""; Flags: runhidden
-Filename: "{app}\fpc\bin\i386-win32\fart.exe"; Parameters: """{app}\lazarus\config\*.xml"" C:\Development\build ""{app}"""; Flags: runhidden
+Filename: "{app}\fpc\bin\i386-win32\fpcmkcfg.exe"; Paramfeters: "-d ""basepath={app}\fpc"" -o ""{app}\fpc\bin\i386-win32\fpc.cfg"""; Flags: runhidden
+Filename: "{app}\fpc\bin\i386-win32\fart.exe"; Parameters: """{app}\lazarus\config\*.xml"" "/home/boxuser/Development/Base" ""{app}"""; Flags: runhidden
 Filename: "http://www.getlazarus.org/installed/?platform=windows"; Flags: shellexec runasoriginaluser
 Filename: "{app}\lazarus\{#MyAppExeName}"; Flags: nowait postinstall skipifsilent
 

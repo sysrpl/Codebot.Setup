@@ -17,9 +17,8 @@ set STEP=Copying FPC sources
 echo -- Step: %STEP% --
 
 rmdir fpc /s /q
-7z x fpc.source.7z
-REM mkdir fpc
-REM xcopy fpc_svn\* fpc /e /h /EXCLUDE:exfpc.txt
+mkdir fpc
+xcopy fpc_svn\* fpc /e /h /EXCLUDE:exfpc.txt
 
 set STEP=Trimming FPC
 echo -- Step: %STEP% --
@@ -28,17 +27,15 @@ set STEP=Compressing FPC
 echo -- Step: %STEP% --
 
 cd %BASE%
-copy fpc.source.7z fpc.7z
-REM 7z a fpc.7z fpc || goto :error
+7z a fpc.7z fpc || goto :error
 
 set STEP=Copying Lazarus sources
 echo -- Step: %STEP% --
 
 cd %BASE%
 rmdir lazarus /s /q
-7z x lazarus.source.7z
-REM mkdir lazarus
-REM xcopy lazarus_svn\* lazarus /e /h /EXCLUDE:exlaz.txt
+mkdir lazarus
+xcopy lazarus_svn\* lazarus /e /h /EXCLUDE:exlaz.txt
 
 set STEP=Patching Lazarus
 echo -- Step: %STEP% --
@@ -48,8 +45,8 @@ move .\images\splash_logo.png .\images\splash_logo_old.png
 copy ..\changes\lazarus\images\splash_logo.png .\images\splash_logo.png
 del .\images\splash_logo.res
 copy ..\changes\lazarus\images\splash_logo.res .\images\splash_logo.res
-REM copy ..\changes\lazarus\changes.diff .
-REM patch -p0 -i changes.diff >> %BASE%\patch_status.txt
+copy ..\changes\lazarus\changes.diff .
+patch -p0 -i changes.diff >> %BASE%\patch_status.txt
 
 set STEP=FPC make all
 echo -- Step: %STEP% --

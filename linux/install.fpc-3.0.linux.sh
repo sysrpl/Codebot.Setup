@@ -173,6 +173,7 @@ while true; do
 	# Allow for relative paths
 	CHOICE=`eval echo $CHOICE`
 	EXPAND=`expandPath "$CHOICE"`
+	EXPAND=${EXPAND%/}
 
 	# Allow install only under your home folder
 	if [[ $EXPAND == $HOME* ]]; then
@@ -373,6 +374,9 @@ make all
 
 # Install anchor docking in the ide
 ./lazbuild ./components/anchordocking/design/anchordockingdsgn.lpk
+./lazbuild ./components/sparta/dockedformeditor/sparta_dockedformeditor.lpk
+./lazbuild ./components/appexplore/appexplore.lpk
+
 rm lazarus.old
 rm lazarus
 make useride
@@ -405,3 +409,4 @@ xdg-open "http://www.getlazarus.org/installed/?platform=linux" &> /dev/null;
 echo 
 echo "Free Pascal 3.0 with Lazarus install complete"
 echo 
+

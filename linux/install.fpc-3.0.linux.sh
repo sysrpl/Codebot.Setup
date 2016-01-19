@@ -18,7 +18,7 @@ BASE=$HOME/Development/FreePascal
 
 # The full version number of the stable compiler and the one we are building
 FPC_STABLE=3.0.0
-FPC_BUILD=3.0.1
+FPC_BUILD=3.1.1
 
 # TODO Allow the user to pick their compiler and ide versions
 

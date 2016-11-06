@@ -22,7 +22,7 @@ fi
 # function download(url, output)
 function download() {
 	if type "curl" > /dev/null; then
-		curl -o "$1" "$2"
+		curl -L -o "$1" "$2"
 	elif type "wget" > /dev/null; then
 		wget -O "$1" "$2"
 	fi	

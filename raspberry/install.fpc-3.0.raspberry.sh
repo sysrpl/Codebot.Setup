@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Author of this script: http://www.getlazarus.org
-# This is the universal script to install fpc 3.0.0 minimal
+# This is the universal script to install raspbian
+# versions of fpc 3.3.1 and lazarus 2.0
 
 # If you need to fix something and or want to contribute, send your 
 # changes to admin at getlazarus dot org with 
@@ -13,16 +14,10 @@ if [ "$(id -u)" = "0" ]; then
    exit 1
 fi
 
-# Prevent this script from running as root 
-if [ "$(id -u)" = "0" ]; then
-   echo "This script should not be run as root"
-   exit 1
-fi
-
 # function download(url, output)
 function download() {
 	if type "curl" > /dev/null; then
-		curl -L -o "$1" "$2"
+		curl -o "$1" "$2"
 	elif type "wget" > /dev/null; then
 		wget -O "$1" "$2"
 	fi	
@@ -82,14 +77,14 @@ sleep 2s
 
 # Present a description of this script
 clear
-echo "Raspberry Free Pascal 3.0 with Lazarus install script"
-echo "-----------------------------------------------------"
+echo "Raspberry Free Pascal 3.3.1 with Lazarus 2.0 install script"
+echo "-----------------------------------------------------------"
 echo "This script will install a lightweight version of"
 echo
-echo "The Free Pascal Compiler version 3.0"
-echo "The Lazarus Development Environment"
+echo "The Free Pascal Compiler 3.3.1 version"
+echo "The Lazarus Development Environment 2.0 version"
 echo
-echo "After install 242MB of drive space will be used"
+echo "After install 635MB of drive space will be used"
 echo
 echo "This lightweight version is designed specifically"
 echo "for the Raspberry Pi running Raspbian OS"
@@ -115,6 +110,7 @@ while true; do
 	# Allow for relative paths
 	CHOICE=`eval echo $CHOICE`
 	EXPAND=`expandPath "$CHOICE"`
+	EXPAND=${EXPAND%/}
 
 	# Allow install only under your home folder
 	if [[ $EXPAND == $HOME* ]]; then
@@ -193,13 +189,12 @@ cd $BASE
 
 # Download from our Amazon S3 bucket 
 URL=http://cache.getlazarus.org/archives
-
 download fpc.lazarus.raspberry.tar.gz $URL/fpc.lazarus.raspberry.tar.gz
+
 tar xvf fpc.lazarus.raspberry.tar.gz
 rm fpc.lazarus.raspberry.tar.gz
 
 # Create the cfg file
-rm "$BASE/fpc/bin/fpc.cfg"
 "$BASE/fpc/bin/fpcmkcfg" -d "basepath=$BASE/fpc/lib/fpc/\$FPCVERSION" -o "$BASE/fpc/bin/fpc.cfg"
 
 # function replace(folder, files, before, after) 
@@ -259,5 +254,5 @@ function hit() {
 
 hit "http://www.getlazarus.org/installed/?platform=raspberry"
 echo 
-echo "Your Free Pascal 3.0 with Lazarus is now installed"
+echo "Your Free Pascal 3.3.1 with Lazarus 2.0 is now installed"
 echo 

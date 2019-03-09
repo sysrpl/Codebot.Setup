@@ -43,6 +43,8 @@ elif [ "$OS_VERSION" -eq 10 ]; then
 	echo "Detected OSX Yosemite"
 elif [ "$OS_VERSION" -eq 11 ]; then
 	echo "Detected OSX El Capitain"
+elif [ "$OS_VERSION" -eq 12 ]; then
+	echo "Detected OSX El Sierra"
 else
 	echo "This installer requires OSX 10.7 (Lion) or above"
 	echo "done."
@@ -103,12 +105,12 @@ else
 	echo "Found macports"	
 fi
 
-if ! ggdb --version &> /dev/null ; then
+if ! gdb --version &> /dev/null ; then
 	echo "Setup has detected that the gnu debugger is not installed"
 	read -p "Press [ENTER] to install the gnu debugger"
 	sudo port install gdb
 	echo
-	if ! ggdb --version &> /dev/null ; then
+	if ! gdb --version &> /dev/null ; then
 		echo "Setup has detected that the gnu debugger did not install"
 		echo "done."
 		echo
@@ -131,7 +133,7 @@ else
 	echo "Found 7-zip"	
 fi
 
-SIGNED="$(codesign -dv /opt/local/bin/ggdb 2>&1)"
+SIGNED="$(codesign -dv /usr/local/bin/gdb 2>&1)"
 
 if [[ $SIGNED == *"object is not signed"* ]]
 then
